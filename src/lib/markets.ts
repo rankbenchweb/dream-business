@@ -24,6 +24,7 @@ export function formatMoney(value: number, market: Market, digits = 2) {
     style: "currency",
     currency: market.currency,
     maximumFractionDigits: digits,
-    minimumFractionDigits: 0,
+    // Whole amounts stay clean ($25); fractional amounts show full cents ($5.10, not $5.1).
+    minimumFractionDigits: Number.isInteger(Math.round(value * 10 ** digits) / 10 ** digits) ? 0 : digits,
   }).format(value);
 }
