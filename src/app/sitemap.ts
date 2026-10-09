@@ -5,6 +5,7 @@ import { liveTools } from "@/lib/tools";
 const pages: { path: string; priority: number }[] = [
   { path: "/", priority: 1 },
   { path: "/business-builder", priority: 0.9 },
+  { path: "/navigator", priority: 0.9 },
   { path: "/intelligence", priority: 0.9 },
   { path: "/tools", priority: 0.9 },
   { path: "/marketplace", priority: 0.9 },

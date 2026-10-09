@@ -5,7 +5,7 @@ import { Logo } from "./Logo";
 
 export function SiteFooter() {
   return (
-    <footer className="on-dark bg-midnight text-fog">
+    <footer className="on-dark bg-midnight text-fog print:hidden">
       <Container className="grid gap-12 py-16 lg:grid-cols-[minmax(0,20rem)_1fr] lg:gap-16">
         <div>
           <Logo id="tdb-f" />

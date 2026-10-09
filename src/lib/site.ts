@@ -27,6 +27,7 @@ export const primaryNav: NavGroup[] = [
     href: "/business-builder",
     summary: "Plan, launch and restructure a business with guided planning tools.",
     links: [
+      { label: "Business Growth Navigator", href: "/navigator", description: "A step-by-step plan for your goal" },
       { label: "Overview", href: "/business-builder", description: "What the Builder covers and what is live today" },
       { label: "Start a business", href: "/business-builder#start", description: "From first idea to launch plan" },
       { label: "Expand an established company", href: "/business-builder#expand", description: "New lines, new markets, new models" },
@@ -99,6 +100,7 @@ export const footerNav: { heading: string; links: NavLink[] }[] = [
     heading: "Platform",
     links: [
       { label: "Business Builder", href: "/business-builder" },
+      { label: "Business Growth Navigator", href: "/navigator" },
       { label: "Business Intelligence", href: "/intelligence" },
       { label: "Business Tools", href: "/tools" },
       { label: "Business Marketplace", href: "/marketplace" },

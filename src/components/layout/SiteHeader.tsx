@@ -67,7 +67,7 @@ export function SiteHeader() {
   }, [mobileOpen]);
 
   return (
-    <header className="on-dark sticky top-0 z-50 bg-midnight text-fog">
+    <header className="on-dark sticky top-0 z-50 bg-midnight text-fog print:hidden">
       <a
         href="#main"
         className="absolute left-4 top-2 z-[60] -translate-y-20 rounded bg-white px-4 py-2 text-sm font-semibold text-ink focus:translate-y-0"

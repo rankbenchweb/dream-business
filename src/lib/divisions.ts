@@ -31,6 +31,7 @@ export const divisions: Record<DivisionKey, Division> = {
       "The Builder turns an objective into a plan: which model fits, what it will cost, what has to happen first. It works the same way for a first venture and for an established company adding a new line or market.",
     forWhom: "First-time founders, owners adding a new business line, and companies planning a new model.",
     capabilities: [
+      { name: "Business Growth Navigator", detail: "Choose a goal and get an ordered plan linked to the right tools.", status: "live", href: "/navigator" },
       { name: "Startup cost planner", detail: "Itemise launch and monthly costs and see your runway.", status: "live", href: "/tools/startup-cost-planner" },
       { name: "Business model comparison", detail: "Compare nine models on capital, risk, margin, speed, control and scale.", status: "live", href: "/tools/business-model-comparison" },
       { name: "Business plan builder", detail: "A structured plan you can save, revise and export.", status: "planned" },

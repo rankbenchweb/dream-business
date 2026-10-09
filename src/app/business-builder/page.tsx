@@ -90,26 +90,26 @@ export default function BusinessBuilderPage() {
               <h2 id="navigator-heading" className="text-2xl sm:text-3xl">
                 The Business Growth Navigator
               </h2>
-              <StatusBadge status="planned" />
+              <StatusBadge status="live" />
             </div>
             <p className="mt-4 max-w-[40rem] text-lg text-muted">
-              A guided assistant that starts from your objective, asks only the questions that objective needs, and returns a plan linked to the right
-              tools, research and services on the platform.
+              Choose what you want to achieve, answer three questions, and get a plan in the right order, linked to the tools for each step.
             </p>
             <p className="mt-4 max-w-[40rem] text-sm text-muted">
-              It will recommend; it will not act for you. Purchases, sign-ups, payments and commitments stay in your hands, and the Navigator will never
-              claim to have contacted a supplier or verified information it has not.
+              It recommends; it never acts for you. Purchases, sign-ups, payments and commitments stay in your hands. A version that uses AI to
+              tailor plans further is planned for a later stage.
             </p>
+            <ButtonLink href="/navigator" className="mt-8">
+              Start the Navigator
+            </ButtonLink>
           </div>
           <ol className="space-y-3 rounded-[var(--radius-md)] border border-line bg-surface p-6 text-sm">
-            {["Choose an objective", "Answer a few focused questions", "Review assumptions and risks", "Get tools, research and services in order", "Track progress as you go"].map(
-              (s, i) => (
-                <li key={s} className="flex gap-3">
-                  <span className="w-5 shrink-0 tabular-nums text-muted">{i + 1}.</span>
-                  <span className="text-slate">{s}</span>
-                </li>
-              ),
-            )}
+            {["Choose a goal", "Answer three questions", "Get ordered steps with the right tools", "See the risks and your first action", "Tick off steps as you go"].map((s, i) => (
+              <li key={s} className="flex gap-3">
+                <span className="w-5 shrink-0 tabular-nums text-muted">{i + 1}.</span>
+                <span className="text-slate">{s}</span>
+              </li>
+            ))}
           </ol>
         </div>
       </Section>

@@ -114,7 +114,7 @@ export default function HomePage() {
                 to your next international expansion.
               </p>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <ButtonLink href="/business-builder" variant="onDark">
+                <ButtonLink href="/navigator" variant="onDark">
                   Build your business
                 </ButtonLink>
                 <ButtonLink href="/tools" variant="onDarkSecondary">
