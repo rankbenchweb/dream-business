@@ -15,7 +15,7 @@ const topics: { title: string; body: string; status: Status; href?: string; link
   { title: "Importing and landed cost", body: "Freight, customs duty, CIF and FOB, and import tax on goods you buy abroad.", status: "live", href: "/tools/landed-cost-calculator", link: "Read the landed cost guide" },
   { title: "Sourcing and suppliers", body: "Comparing supplier quotes, minimum orders and reorder planning.", status: "live", href: "/tools/supplier-comparison", link: "Read the supplier guide" },
   { title: "Cash flow", body: "Why profitable businesses run out of cash, and how to see it coming.", status: "live", href: "/tools/cash-flow-planner", link: "Read the cash-flow guide" },
-  { title: "Payments by country", body: "Which payment options are realistic in your country and how payouts work.", status: "planned" },
+  { title: "Payments by country", body: "Which payment services accept businesses where you are, and what to do if the big names don't.", status: "live", href: "/tools/payment-provider-finder", link: "Read the payments guide" },
   { title: "Selling internationally", body: "Shipping, customs, marketplaces and tax when you sell across borders.", status: "planned" },
   { title: "Marketing economics", body: "ROAS, cost per sale and when advertising pays.", status: "live", href: "/tools/advertising-profitability-calculator", link: "Read the advertising guide" },
 ];

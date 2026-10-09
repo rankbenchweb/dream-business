@@ -70,12 +70,12 @@ export const tools: Tool[] = [
   { slug: "inventory-planner", name: "Inventory reorder planner", summary: "Reorder point, safety stock and order quantity from sales rate and supplier lead time.", category: "Shipping and fulfillment", status: "live", href: "/tools/inventory-reorder-planner" },
   { slug: "ad-profitability", name: "Advertising profitability calculator", summary: "Break-even ROAS, the most you can pay per sale, and whether a campaign makes a profit.", category: "Marketing and SEO", status: "live", href: "/tools/advertising-profitability-calculator" },
   { slug: "cac-ltv", name: "Customer acquisition and lifetime value", summary: "Compare what a customer costs to win with what they are worth, and the payback period.", category: "Marketing and SEO", status: "live", href: "/tools/customer-lifetime-value-calculator" },
-  { slug: "marketing-budget", name: "Marketing budget planner", summary: "Allocate a marketing budget across channels and track planned spend.", category: "Marketing and SEO", status: "planned" },
+  { slug: "marketing-budget", name: "Marketing budget planner", summary: "Split a monthly budget across channels and estimate new customers and blended cost per customer.", category: "Marketing and SEO", status: "live", href: "/tools/marketing-budget-planner" },
   { slug: "supplier-comparison", name: "Supplier comparison worksheet", summary: "Compare up to four supplier quotes on cost, minimum-order cash, lead time, quality and reliability.", category: "Suppliers and sourcing", status: "live", href: "/tools/supplier-comparison" },
   { slug: "cash-flow", name: "Cash-flow planner", summary: "Project your bank balance month by month, see when cash runs short and how much funding you need.", category: "Finance and planning", status: "live", href: "/tools/cash-flow-planner" },
   { slug: "market-comparison", name: "Country market comparison", summary: "Compare target markets on sourced economic and ecommerce indicators.", category: "Market research", status: "planned" },
-  { slug: "payment-provider-finder", name: "Payment provider finder", summary: "Check which payment providers state support for your country and business type.", category: "International expansion", status: "planned" },
-  { slug: "workflow-planner", name: "Automation workflow planner", summary: "Map a repetitive process and identify the steps worth automating.", category: "Business automation", status: "planned" },
+  { slug: "payment-provider-finder", name: "Payment provider finder", summary: "See which payment providers accept businesses in your country, with sources and the date checked.", category: "International expansion", status: "live", href: "/tools/payment-provider-finder" },
+  { slug: "workflow-planner", name: "Automation planner", summary: "Find the repetitive tasks worth automating first, and the hours and money they free each month.", category: "Business automation", status: "live", href: "/tools/automation-planner" },
 ];
 
 export const liveTools = tools.filter((t) => t.status === "live");

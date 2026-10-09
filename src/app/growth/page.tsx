@@ -22,7 +22,7 @@ const questions = [
 ];
 
 const international = [
-  { title: "Payments and payouts", body: "Which providers state support for your country, business type and payout currency." },
+  { title: "Payments and payouts", body: "Which providers state support for your country, business type and payout currency. The payment provider finder is live now." },
   { title: "Shipping, customs and duty", body: "Landed cost and the documentation each route requires." },
   { title: "Marketplaces and platforms", body: "Where you are eligible to sell, and on what terms." },
   { title: "Local services", body: "Fulfilment, agencies and advisers in the market you are entering." },
