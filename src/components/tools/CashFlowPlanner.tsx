@@ -209,7 +209,7 @@ export function CashFlowPlanner() {
           <h2 id="cash-table" className="text-xl">
             Month by month
           </h2>
-          <div className="mt-4 overflow-x-auto rounded-[var(--radius-md)] border border-line bg-surface" tabIndex={0} role="region" aria-labelledby="cash-table">
+          <div className="mt-4 overflow-x-auto rounded-[var(--radius-md)] border border-line bg-surface" tabIndex={0} role="region" aria-label="Month-by-month cash table, scrolls sideways on small screens">
             <table className="w-full min-w-[40rem] text-right text-sm tabular-nums">
               <thead className="bg-paper text-xs text-muted">
                 <tr>

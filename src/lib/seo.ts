@@ -9,6 +9,15 @@ type PageMeta = {
   noindex?: boolean;
 };
 
+/** Site-wide share image (src/app/opengraph-image.tsx). Pages that set their own
+ *  openGraph object replace the inherited one, so it is listed explicitly. */
+const shareImage = {
+  url: "/opengraph-image",
+  width: 1200,
+  height: 630,
+  alt: "The Dream Business, the business builder: where businesses build their future.",
+};
+
 export function pageMetadata({ title, description, path, noindex }: PageMeta): Metadata {
   const url = `${site.url}${path}`;
   return {
@@ -22,8 +31,9 @@ export function pageMetadata({ title, description, path, noindex }: PageMeta): M
       siteName: site.name,
       type: "website",
       locale: "en",
+      images: [shareImage],
     },
-    twitter: { card: "summary_large_image", title: `${title} | ${site.name}`, description },
+    twitter: { card: "summary_large_image", title: `${title} | ${site.name}`, description, images: [shareImage.url] },
     robots: noindex ? { index: false, follow: true } : undefined,
   };
 }

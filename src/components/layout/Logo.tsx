@@ -86,12 +86,13 @@ export function Emblem({
 
 export function Logo({ onNavigate, id }: { onNavigate?: () => void; id?: string }) {
   return (
-    <Link href="/" onNavigate={onNavigate} className="group flex items-center gap-3 rounded-sm" aria-label="The Dream Business, home">
+    <Link href="/" onNavigate={onNavigate} className="group flex items-center gap-3 rounded-sm">
       <Emblem id={id} glow className="size-11 shrink-0" />
       <span className="flex flex-col leading-none">
         <span className="whitespace-nowrap font-display text-[1.0625rem] font-bold tracking-[-0.02em] text-white">The Dream Business</span>
         <span className="mt-1 whitespace-nowrap text-[0.6875rem] font-medium tracking-[0.04em] text-gold-bright">The Business Builder</span>
       </span>
+      <span className="sr-only">, home</span>
     </Link>
   );
 }

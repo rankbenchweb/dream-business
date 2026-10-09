@@ -139,7 +139,8 @@ export function SupplierComparison() {
                   </div>
                 ))}
               </div>
-              <dl className="on-dark mt-auto space-y-2 rounded-b-[var(--radius-md)] bg-midnight p-4 text-sm text-fog" aria-live="polite">
+              <div className="on-dark mt-auto rounded-b-[var(--radius-md)] bg-midnight p-4 text-sm text-fog" aria-live="polite">
+                <dl className="space-y-2">
                 <div className="flex items-baseline justify-between">
                   <dt className="text-mist">Score</dt>
                   <dd className="font-display text-2xl font-semibold text-white">{sc.valid && Number.isFinite(sc.score) ? Math.round(sc.score) : "—"}</dd>
@@ -152,9 +153,10 @@ export function SupplierComparison() {
                   <dt className="text-mist">Cash for minimum order</dt>
                   <dd>{sc.valid ? formatMoney(sc.outlay, market, 0) : "—"}</dd>
                 </div>
-                {isBest ? <p className="pt-1 text-xs font-semibold text-gold-bright">Best match for your priorities</p> : null}
-                {!sc.valid ? <p className="pt-1 text-xs text-[#f4a39c]">Fill in every field. Ratings must be 1 to 5.</p> : null}
-              </dl>
+                </dl>
+                {isBest ? <p className="pt-3 text-xs font-semibold text-gold-bright">Best match for your priorities</p> : null}
+                {!sc.valid ? <p className="pt-3 text-xs text-[#f4a39c]">Fill in every field. Ratings must be 1 to 5.</p> : null}
+              </div>
             </section>
           );
         })}

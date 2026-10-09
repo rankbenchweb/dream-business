@@ -168,7 +168,7 @@ export default function PromotePage() {
                 type={l.type}
                 className={cx(
                   "mt-6 inline-flex min-h-11 items-center justify-center rounded-[var(--radius-sm)] px-5 text-sm font-semibold transition-colors",
-                  l.enterprise ? "bg-brass text-white hover:bg-[#8f6d2f]" : "border border-line-strong bg-surface text-ink hover:border-ink",
+                  l.enterprise ? "bg-brass text-white hover:bg-[#6e5112]" : "border border-line-strong bg-surface text-ink hover:border-ink",
                 )}
               >
                 {l.cta}

@@ -69,7 +69,7 @@ const variantClass: Record<Variant, string> = {
   secondary: "border border-line-strong bg-surface text-ink hover:border-ink",
   onDark: "bg-gold-bright text-midnight hover:bg-white",
   onDarkSecondary: "border border-harbour-line text-white hover:border-mist hover:bg-harbour",
-  brass: "bg-brass text-white hover:bg-[#8f6d2f]",
+  brass: "bg-brass text-white hover:bg-[#6e5112]",
 };
 const buttonBase =
   "inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-sm)] px-5 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60";
