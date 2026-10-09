@@ -68,3 +68,7 @@ adapter; check Cache Components compatibility before choosing it.
 ## Database plan
 
 The Stage 2 schema (accounts, organizations, directory listings, campaigns, saved items) is written and tested but not applied. See `docs/database-stage2.md` before applying it.
+
+## Business accounts
+
+Sign-in, business profiles, listing submission, staff review and the public directory are built and switched off until Supabase is configured. See `docs/accounts-setup.md`. Tests: `supabase/tests/stage2_policies.py` (database rules) and `supabase/tests/fake_supabase.py` (local stand-in used for end-to-end tests).

@@ -1,3 +1,4 @@
+import { listBusinessHref } from "./supabase/config";
 import type { Status } from "./tools";
 
 export type Capability = {
@@ -86,7 +87,7 @@ export const divisions: Record<DivisionKey, Division> = {
       "The Marketplace is a directory of companies that help businesses operate. Basic listings are free. Paid placement, verification and editorial recommendation are kept separate and labelled separately — paying never buys a verified badge.",
     forWhom: "Businesses looking for partners, and the suppliers and service providers who serve them.",
     capabilities: [
-      { name: "Free business listing requests", detail: "Submit your company for the directory through the inquiry form.", status: "live", href: "/promote?type=directory#inquiry" },
+      { name: "Free business listing requests", detail: "Submit your company for the directory through the inquiry form.", status: "live", href: listBusinessHref },
       { name: "Business profiles", detail: "Company profiles with services, markets served and contact routes.", status: "building" },
       { name: "Category directories", detail: "Browse suppliers, software, logistics, agencies and more.", status: "building" },
       { name: "Search and filters", detail: "Filter by category, country served and business size.", status: "planned" },

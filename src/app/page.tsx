@@ -8,6 +8,7 @@ import { ButtonLink, Container, GridTexture, Section, SectionHeading, StatusBadg
 import { divisionOrder, divisions } from "@/lib/divisions";
 import { marketplaceCategories } from "@/lib/marketplace";
 import { site } from "@/lib/site";
+import { listBusinessHref } from "@/lib/supabase/config";
 
 export const metadata: Metadata = {
   title: { absolute: `${site.name} | ${site.identity}. ${site.tagline}` },
@@ -238,7 +239,7 @@ export default function HomePage() {
               lead="The Marketplace brings suppliers, software, logistics and professional services into one directory, with paid placement and verification kept strictly apart."
             />
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <ButtonLink href="/promote?type=directory#inquiry">List your business free</ButtonLink>
+              <ButtonLink href={listBusinessHref}>List your business free</ButtonLink>
               <ButtonLink href="/marketplace" variant="secondary">
                 Explore the Marketplace
               </ButtonLink>

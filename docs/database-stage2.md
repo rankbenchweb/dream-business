@@ -31,7 +31,7 @@ A person and the business they represent are separate. One person can belong to 
 | Campaign manager | Create and edit campaigns |
 | Analyst | Read listings, campaigns and campaign metrics |
 
-Rules enforced by the database: the creator becomes owner; an organization always keeps at least one owner; admins can't create or remove owners; anyone can leave.
+Rules enforced by the database: the creator becomes owner; an organization always keeps at least one owner (except when that owner deletes their whole account, which is always allowed; staff then reassign or remove the profile); admins can't create or remove owners; anyone can leave.
 
 ## Trust rules the database enforces
 
@@ -60,15 +60,15 @@ Live sponsored placements are shown by the website's server, not read from the b
 
 ## Tested
 
-A local PostgreSQL 16 database with a stand-in for Supabase's sign-in layer ran 66 checks, all passing, covering every rule above: role limits, self-publishing and self-verification blocked, re-review on edit, cross-organization access denied, public visibility, metrics protection, saved-item privacy, audit trail, cascade deletes and account deletion. Testing found and fixed one issue: a new organization couldn't be read back in the same request that created it.
+A local PostgreSQL 16 database with a stand-in for Supabase's sign-in layer ran 69 checks, all passing, covering every rule above: role limits, self-publishing and self-verification blocked, re-review on edit, cross-organization access denied, public visibility, metrics protection, saved-item privacy, audit trail, cascade deletes and account deletion. Testing found and fixed two issues: a new organization couldn't be read back in the same request that created it, and the sole owner of an organization couldn't delete their account.
 
-Not yet tested: against a real Supabase project, and with the website's sign-in screens (not built yet).
+Also tested end to end with the website's account screens through a local stand-in for Supabase (see `docs/accounts-setup.md`). Not yet tested against a real Supabase project.
 
 ## Before applying
 
 1. Choose the Supabase project (the free plan allows two active projects; both are in use).
 2. Apply to a development branch or a fresh project first, then run the Supabase security advisor.
-3. Build sign-in, the listing submission form and the staff review screen; these use this schema.
+3. Sign-in, listing submission and staff review are built; see `docs/accounts-setup.md`.
 4. Decide who on the team counts as staff. Staff actions run on the server with the service role key, which must never reach the browser.
 
 ## Known trade-offs

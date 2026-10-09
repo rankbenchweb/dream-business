@@ -1,3 +1,5 @@
+import { listBusinessHref } from "./supabase/config";
+
 /**
  * Central site configuration. Change the production URL here (or via
  * NEXT_PUBLIC_SITE_URL) once a domain is confirmed.
@@ -59,7 +61,7 @@ export const primaryNav: NavGroup[] = [
     summary: "Find suppliers, software, logistics and professional services.",
     links: [
       { label: "Marketplace overview", href: "/marketplace", description: "Directory categories and listing standards" },
-      { label: "List your business", href: "/promote?type=directory#inquiry", description: "Basic listings are free" },
+      { label: "List your business", href: listBusinessHref, description: "Basic listings are free" },
       { label: "Verification standards", href: "/verification-standards", description: "How listings are checked" },
     ],
   },
@@ -113,7 +115,7 @@ export const footerNav: { heading: string; links: NavLink[] }[] = [
     links: [
       { label: "Business promotion", href: "/promote" },
       { label: "Advertiser information", href: "/advertising-standards" },
-      { label: "Submit a business", href: "/promote?type=directory#inquiry" },
+      { label: "Submit a business", href: listBusinessHref },
       { label: "Business directory", href: "/marketplace" },
     ],
   },

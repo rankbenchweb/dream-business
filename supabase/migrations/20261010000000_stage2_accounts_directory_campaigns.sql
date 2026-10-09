@@ -170,7 +170,8 @@ $$;
 create trigger organizations_add_owner after insert on public.organizations
   for each row execute function private.add_creator_as_owner();
 
--- An organization must always keep at least one owner.
+-- An organization must always keep at least one owner, except when the owner's
+-- account itself is deleted.
 create or replace function private.keep_an_owner()
 returns trigger
 language plpgsql
@@ -181,6 +182,9 @@ begin
   if old.role = 'owner'
      and (tg_op = 'DELETE' or new.role <> 'owner')
      and exists (select 1 from public.organizations o where o.id = old.organization_id)
+     -- Deleting the person's whole account is always allowed (privacy requests);
+     -- staff then reassign or remove the ownerless organization.
+     and exists (select 1 from auth.users u where u.id = old.user_id)
      and not exists (
        select 1 from public.organization_members m
        where m.organization_id = old.organization_id and m.role = 'owner' and m.user_id <> old.user_id

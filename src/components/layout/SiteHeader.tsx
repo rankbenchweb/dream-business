@@ -8,6 +8,7 @@ import { Container, cx } from "@/components/ui";
 import { Logo } from "./Logo";
 import { MarketSelector } from "./MarketSelector";
 import { SearchDialog } from "./SearchDialog";
+import { accountsEnabled } from "@/lib/supabase/config";
 
 function isActive(pathname: string, href: string) {
   const base = href.split(/[?#]/)[0];
@@ -87,6 +88,11 @@ export function SiteHeader() {
             <Link href="/contact" className="text-mist hover:text-white">
               Contact
             </Link>
+            {accountsEnabled ? (
+              <Link href="/account" className="font-semibold text-gold-bright hover:text-white">
+                Account
+              </Link>
+            ) : null}
           </div>
         </Container>
       </div>
@@ -241,6 +247,11 @@ export function SiteHeader() {
             <Link href="/contact" onNavigate={closeAll} className="text-fog hover:text-white">
               Contact
             </Link>
+            {accountsEnabled ? (
+              <Link href="/account" onNavigate={closeAll} className="font-semibold text-gold-bright hover:text-white">
+                Sign in or your account
+              </Link>
+            ) : null}
           </div>
         </Container>
       </div>

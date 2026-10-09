@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { searchSite } from "@/lib/search";
+import { listBusinessHref } from "@/lib/supabase/config";
 
 export function SearchIcon({ className }: { className?: string }) {
   return (
@@ -17,7 +18,7 @@ const suggestions = [
   { title: "Profit margin calculator", href: "/tools/profit-margin-calculator" },
   { title: "Break-even calculator", href: "/tools/break-even-calculator" },
   { title: "Promote your business", href: "/promote" },
-  { title: "List your business", href: "/promote?type=directory#inquiry" },
+  { title: "List your business", href: listBusinessHref },
 ];
 
 /**

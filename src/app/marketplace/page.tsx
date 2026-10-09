@@ -1,9 +1,14 @@
+import { connection } from "next/server";
+import { Suspense } from "react";
 import { DivisionPage } from "@/components/DivisionPage";
+import { DirectoryBrowser } from "@/components/directory/DirectoryBrowser";
 import { DisclosureLabel, disclosures } from "@/components/Disclosure";
 import { ButtonLink, Section, SectionHeading, TextLink } from "@/components/ui";
 import { divisions } from "@/lib/divisions";
 import { marketplaceCategories } from "@/lib/marketplace";
+import { getDirectory } from "@/lib/directory";
 import { pageMetadata } from "@/lib/seo";
+import { accountsEnabled, listBusinessHref } from "@/lib/supabase/config";
 
 const d = divisions.marketplace;
 export const metadata = pageMetadata({
@@ -26,7 +31,7 @@ export default function MarketplacePage() {
       division="marketplace"
       actions={
         <>
-          <ButtonLink href="/promote?type=directory#inquiry" variant="onDark">
+          <ButtonLink href={listBusinessHref} variant="onDark">
             List your business free
           </ButtonLink>
           <ButtonLink href="#categories" variant="onDarkSecondary">
@@ -52,6 +57,21 @@ export default function MarketplacePage() {
         </ul>
       </Section>
 
+      {accountsEnabled ? (
+        <Section id="directory" labelledBy="directory-heading">
+          <SectionHeading
+            id="directory-heading"
+            title="Business directory"
+            lead="Businesses that submitted a listing and passed review. Verified means we completed a documented check; it can't be bought."
+          />
+          <div className="mt-10">
+            <Suspense fallback={<p className="text-sm text-muted">Loading the directory…</p>}>
+              <LiveDirectory />
+            </Suspense>
+          </div>
+        </Section>
+      ) : null}
+
       <Section labelledBy="listing-heading">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] lg:gap-16">
           <div>
@@ -69,8 +89,8 @@ export default function MarketplacePage() {
                 </li>
               ))}
             </ol>
-            <ButtonLink href="/promote?type=directory#inquiry" className="mt-10">
-              Submit a free listing request
+            <ButtonLink href={listBusinessHref} className="mt-10">
+              {accountsEnabled ? "Add your business listing" : "Submit a free listing request"}
             </ButtonLink>
           </div>
           <aside className="self-start rounded-[var(--radius-md)] border border-line bg-surface p-7">
@@ -92,5 +112,36 @@ export default function MarketplacePage() {
         </div>
       </Section>
     </DivisionPage>
+  );
+}
+
+/** Rendered per request so a listing change shows immediately; the data itself is cached and refreshed by tag. */
+async function LiveDirectory() {
+  await connection();
+  const directory = await getDirectory();
+  if (!directory.ok) return <p className="text-sm text-muted">The directory can&apos;t be loaded right now. Please try again shortly.</p>;
+  if (!directory.listings.length) {
+    return (
+      <p className="rounded-[var(--radius-md)] border border-dashed border-line-strong p-6 text-sm text-muted">
+        The first listings are in review. <TextLink href="/sign-in?next=/account/listings/new">Add your business</TextLink> to be among them.
+      </p>
+    );
+  }
+  const catName = new Map(directory.categories.map((c) => [c.id, c.name]));
+  return (
+    <DirectoryBrowser
+      categories={directory.categories.map((c) => c.name)}
+      listings={directory.listings.map((l) => ({
+        id: l.id,
+        name: l.name,
+        summary: l.summary,
+        website: l.website,
+        headquarters: l.headquarters,
+        serves_markets: l.serves_markets,
+        verified: l.verification === "verified",
+        verified_scope: l.verified_scope,
+        category: catName.get(l.category_id) ?? "",
+      }))}
+    />
   );
 }

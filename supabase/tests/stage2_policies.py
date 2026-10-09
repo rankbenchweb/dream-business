@@ -146,5 +146,12 @@ check("cascade removed its listing", run(None, "select count(*) from public.busi
 ok("deleting an account removes its data", run(None, "delete from auth.users where id=%s", (B,)))
 check("account's profile and saved items gone", run(None, "select (select count(*) from public.profiles where id=%s) + (select count(*) from public.saved_items where user_id=%s)", (B, B))[1][0][0] == 0)
 
+F = uuid.uuid4()
+run(None, "insert into auth.users (id) values (%s)", (F,))
+org3 = run(F, "insert into public.organizations (name, slug) values ('Solo Co', 'solo-co') returning id")[1][0][0]
+denied("sole owner still can't step down", run(F, "update public.organization_members set role='admin' where user_id=%s", (F,)), "at least one owner")
+ok("sole owner can delete their whole account", run(None, "delete from auth.users where id=%s", (F,)))
+check("their organization remains for staff to handle", run(None, "select count(*) from public.organizations where id=%s", (org3,))[1][0][0] == 1)
+
 print("\n".join(results))
 print(f"{sum(r.startswith('PASS') for r in results)} passed, {sum(r.startswith('FAIL') for r in results)} failed")
