@@ -2,9 +2,10 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { AccountsClosed, ListingStatusBadge, Loading, Notice } from "@/components/account/Shared";
 import { ButtonLink, PageHero, Section, TextLink } from "@/components/ui";
-import { getCategories, getListingsForOrgs, getMyOrganizations } from "@/lib/accountData";
+import { getCategories, getListingsForOrgs, getMyInvitations, getMyOrganizations } from "@/lib/accountData";
+import { respondToInvitation } from "./team/actions";
 import { isStaffEmail, requireUser } from "@/lib/auth";
-import { canEditListings, listingStatusHelp, roleLabel } from "@/lib/listings";
+import { canEditListings, canManageTeam, listingStatusHelp, roleLabel } from "@/lib/listings";
 import { pageMetadata } from "@/lib/seo";
 import { accountsEnabled } from "@/lib/supabase/config";
 
@@ -39,7 +40,7 @@ const dateFmt = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short
 async function AccountBody({ searchParams }: { searchParams: Search }) {
   const user = await requireUser("/account");
   const { notice } = await searchParams;
-  const orgs = await getMyOrganizations(user.id);
+  const [orgs, invitations] = await Promise.all([getMyOrganizations(user.id), getMyInvitations()]);
   const [listings, categories] = await Promise.all([getListingsForOrgs(orgs.map((o) => o.id)), getCategories()]);
   const catName = new Map(categories.map((c) => [c.id, c.name]));
 
@@ -59,6 +60,33 @@ async function AccountBody({ searchParams }: { searchParams: Search }) {
           </form>
         </div>
       </div>
+
+      {invitations.length ? (
+        <section aria-labelledby="invites-heading" className="mt-8 rounded-[var(--radius-md)] border border-gold/30 bg-gold-soft p-6">
+          <h2 id="invites-heading" className="text-xl">
+            {invitations.length === 1 ? "You've been invited to a team" : `You've been invited to ${invitations.length} teams`}
+          </h2>
+          <ul className="mt-4 space-y-4">
+            {invitations.map((i) => (
+              <li key={i.id} className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-slate">
+                  <strong className="text-ink">{i.organization_name}</strong> invited you as {roleLabel[i.role].toLowerCase()}.
+                  <span className="block text-xs text-muted">Open until {dateFmt.format(new Date(i.expires_at))}</span>
+                </p>
+                <form action={respondToInvitation} className="flex gap-2">
+                  <input type="hidden" name="invitationId" value={i.id} />
+                  <button name="answer" value="accept" className="inline-flex min-h-11 items-center rounded-[var(--radius-sm)] bg-gold px-4 text-sm font-semibold text-white hover:bg-gold-strong">
+                    Accept<span className="sr-only"> invitation from {i.organization_name}</span>
+                  </button>
+                  <button name="answer" value="decline" className="inline-flex min-h-11 items-center rounded-[var(--radius-sm)] border border-line-strong bg-surface px-4 text-sm font-semibold text-ink hover:border-ink">
+                    Decline<span className="sr-only"> invitation from {i.organization_name}</span>
+                  </button>
+                </form>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       {!orgs.length ? (
         <div className="mt-10 max-w-[40rem]">
@@ -92,11 +120,17 @@ async function AccountBody({ searchParams }: { searchParams: Search }) {
                       ) : null}
                     </p>
                   </div>
-                  {canEdit ? (
-                    <ButtonLink href={`/account/listings/new?org=${org.id}`} variant="secondary">
-                      Add a listing
+                  <div className="flex flex-wrap gap-3">
+                    <ButtonLink href={`/account/team?org=${org.id}`} variant="secondary">
+                      {canManageTeam(org.role) ? "Manage team" : "View team"}
+                      <span className="sr-only"> for {org.name}</span>
                     </ButtonLink>
-                  ) : null}
+                    {canEdit ? (
+                      <ButtonLink href={`/account/listings/new?org=${org.id}`} variant="secondary">
+                        Add a listing<span className="sr-only"> for {org.name}</span>
+                      </ButtonLink>
+                    ) : null}
+                  </div>
                 </div>
                 {own.length ? (
                   <ul className="mt-5 divide-y divide-line rounded-[var(--radius-md)] border border-line">

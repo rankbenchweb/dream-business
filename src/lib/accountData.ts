@@ -58,3 +58,35 @@ export async function getCategories(): Promise<Category[]> {
   if (error) throw new Error(`categories: ${error.message}`);
   return (data ?? []) as Category[];
 }
+
+export type Invitation = { id: string; organization_name: string; role: OrgRole; expires_at: string };
+export type TeamMember = { user_id: string; email: string; role: OrgRole; joined_at: string };
+export type PendingInvite = { id: string; email: string; role: OrgRole; expires_at: string; created_at: string };
+
+/** Open invitations addressed to the signed-in person's email. */
+export async function getMyInvitations(): Promise<Invitation[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("my_invitations");
+  if (error) throw new Error(`invitations: ${error.message}`);
+  return (data ?? []) as Invitation[];
+}
+
+export async function getTeam(orgId: string): Promise<TeamMember[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("organization_team", { org: orgId });
+  if (error) throw new Error(`team: ${error.message}`);
+  return (data ?? []) as TeamMember[];
+}
+
+/** Pending invitations for an organization (owners and admins only, by RLS). */
+export async function getPendingInvites(orgId: string): Promise<PendingInvite[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("organization_invitations")
+    .select("id,email,role,expires_at,created_at,accepted_at,closed_at")
+    .eq("organization_id", orgId)
+    .order("created_at", { ascending: false });
+  if (error) throw new Error(`pending invites: ${error.message}`);
+  const now = Date.now();
+  return (data ?? []).filter((i) => !i.accepted_at && !i.closed_at && new Date(i.expires_at as string).getTime() > now) as PendingInvite[];
+}

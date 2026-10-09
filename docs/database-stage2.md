@@ -17,6 +17,8 @@ It is additive: it creates new tables, functions and policies and changes nothin
 | Saved tools, listings and Navigator plans | `saved_items` |
 | Accountability | `audit_log` |
 
+Team invitations are added by a second migration, `20261011000000_organization_invitations.sql` (32 policy checks pass): owners and admins invite by email; the invited person accepts after signing in with that address; owners can't be invited, only promoted after joining.
+
 Payments, subscriptions and invoices are deliberately left out until pricing and provider eligibility are settled.
 
 ## People and organizations

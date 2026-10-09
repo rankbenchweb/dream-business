@@ -8,6 +8,7 @@ hides all sign-in links and account pages say accounts open soon.
 - **Sign in by email link.** No passwords. The same link creates an account.
 - **Business profiles.** A person creates a profile for their business and becomes its owner.
 - **Directory listings.** Owners, admins and editors create listings, save drafts, submit for review, withdraw, archive and restore.
+- **Teams.** Owners and admins invite colleagues by email as admin, editor, campaign manager or analyst, change roles, cancel invitations and remove members. Invitations are not emailed yet: the invited person signs in with that address and accepts on their account page (open for 14 days). A business always keeps at least one owner.
 - **Staff review** at `/staff/review`, for the emails in `STAFF_EMAILS` only: publish, return with a note, mark verified (with a description of the check) or remove verification.
 - **Public directory** on the Marketplace page: published listings only, with search and filters by category and market served.
 
@@ -17,8 +18,8 @@ database, not just by the screens. See `docs/database-stage2.md`.
 ## Steps to switch it on
 
 1. **Choose a Supabase project.** The free plan allows two active projects.
-2. **Apply the migration** `supabase/migrations/20261010000000_stage2_accounts_directory_campaigns.sql`
-   (and the inquiries migration if you store inquiries there). Then run the Supabase security advisor.
+2. **Apply the migrations** in order: `20261010000000_stage2_accounts_directory_campaigns.sql`, then
+   `20261011000000_organization_invitations.sql` (and the inquiries migration if you store inquiries there). Then run the Supabase security advisor.
 3. **Sign-in settings** (Supabase dashboard, Authentication):
    - URL configuration: set the Site URL to the live address, and add `https://<your-domain>/auth/callback` to the redirect URLs.
    - Email provider: enabled. The default magic-link email template works as it is.
@@ -38,11 +39,11 @@ database, not just by the screens. See `docs/database-stage2.md`.
 The real Supabase sign-in server couldn't be run in the build environment, so
 testing used `supabase/tests/fake_supabase.py`: a small local stand-in for
 Supabase's sign-in and data services, running on a real PostgreSQL database
-with this project's actual security rules. 36 browser checks passed end to end,
+with this project's actual security rules. 36 account checks and 24 team checks passed end to end,
 including the full sign-in link flow, used links, business profile, listing
 validation, withdraw and resubmit, outsider and non-staff access blocked, staff
 return with note, publish, verify, directory filters, edits sending a live
-listing back to review, safe redirects, sign-out, and mobile layout. Account and
+listing back to review, safe redirects, sign-out, mobile layout, and for teams: inviting, duplicate and invalid invitations, accepting, declining, cancelling, role changes taking effect, the last owner unable to leave, removal ending access, and outsiders blocked. Account and
 staff pages passed automated accessibility checks at desktop and mobile sizes.
 
 The stand-in is not Supabase, so step 6 above is required before launch.

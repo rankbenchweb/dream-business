@@ -16,6 +16,25 @@ export const roleLabel: Record<OrgRole, string> = {
   analyst: "Analyst",
 };
 
+export const canManageTeam = (role: OrgRole) => role === "owner" || role === "admin";
+
+/** Roles someone can be invited with (owners are promoted after joining). */
+export const invitableRoles: { value: Exclude<OrgRole, "owner">; label: string; detail: string }[] = [
+  { value: "admin", label: "Admin", detail: "Manages the profile, team, listings and campaigns." },
+  { value: "editor", label: "Editor", detail: "Creates and edits directory listings." },
+  { value: "campaign_manager", label: "Campaign manager", detail: "Creates and edits promotion campaigns." },
+  { value: "analyst", label: "Analyst", detail: "Views listings, campaigns and their results." },
+];
+
+/** Roles the viewer may give to someone else. */
+export function assignableRoles(viewer: OrgRole): OrgRole[] {
+  if (viewer === "owner") return ["owner", "admin", "editor", "campaign_manager", "analyst"];
+  if (viewer === "admin") return ["admin", "editor", "campaign_manager", "analyst"];
+  return [];
+}
+
+export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
 export const canEditListings = (role: OrgRole) => role === "owner" || role === "admin" || role === "editor";
 
 export const listingStatusLabel: Record<ListingStatus, string> = {

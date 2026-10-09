@@ -4,7 +4,8 @@ import { useActionState, useId, useState, type ReactNode } from "react";
 import { useFormStatus } from "react-dom";
 import { createOrganization, saveListing, sendSignInLink, type ListingState, type OrgState, type SignInState } from "@/app/account/actions";
 import { cx } from "@/components/ui";
-import { serviceMarkets, type Category, type ListingStatus, type MyOrgOption } from "@/lib/listings";
+import { invitableRoles, serviceMarkets, type Category, type ListingStatus, type MyOrgOption } from "@/lib/listings";
+import { inviteMember, type InviteState } from "@/app/account/team/actions";
 
 export const fieldBase =
   "mt-2 w-full rounded-[var(--radius-sm)] border bg-surface px-3 text-base text-ink placeholder:text-muted/70 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20";
@@ -275,6 +276,32 @@ export function ListingForm({ orgs, categories, defaults: initial = {} }: { orgs
           </Submit>
         )}
       </div>
+    </form>
+  );
+}
+
+export function InviteForm({ organizationId }: { organizationId: string }) {
+  const [state, action] = useActionState<InviteState, FormData>(inviteMember, {});
+  const id = useId();
+  return (
+    <form action={action} noValidate className="space-y-5">
+      <FormError message={state.error} />
+      <input type="hidden" name="organizationId" value={organizationId} />
+      <div className="grid gap-5 sm:grid-cols-[minmax(0,1fr)_minmax(0,14rem)]">
+        <Field id={`${id}-email`} label="Their email address" hint="They sign in with this address to accept.">
+          <input id={`${id}-email`} name="email" type="email" autoComplete="off" defaultValue={state.email} aria-describedby={describe(`${id}-email`, true)} className={cx(fieldBase, "h-12", border())} />
+        </Field>
+        <Field id={`${id}-role`} label="Role">
+          <select id={`${id}-role`} name="role" defaultValue={state.role ?? "editor"} className={cx(fieldBase, "h-12", border())}>
+            {invitableRoles.map((r) => (
+              <option key={r.value} value={r.value}>
+                {r.label}
+              </option>
+            ))}
+          </select>
+        </Field>
+      </div>
+      <Submit>Send invitation</Submit>
     </form>
   );
 }

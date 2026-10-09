@@ -16,7 +16,7 @@ Supabase: always repeat the final check against a real project.
 Usage: python3 fake_supabase.py <dbname> <email_log> [port]
 """
 import base64, hashlib, hmac, json, re, secrets, sys, threading, time, uuid
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
@@ -28,7 +28,7 @@ PORT = int(sys.argv[3]) if len(sys.argv) > 3 else 54321
 SECRET = b"local-test-jwt-secret"
 KEYS = {"sb_publishable_test": "anon", "sb_secret_test": "service_role"}
 IDENT = re.compile(r"^[a-z_][a-z0-9_]*$")
-TABLES = {"profiles", "organizations", "organization_members", "listing_categories", "business_listings", "campaigns", "campaign_metrics", "saved_items", "audit_log"}
+TABLES = {"profiles", "organizations", "organization_members", "listing_categories", "business_listings", "campaigns", "campaign_metrics", "saved_items", "audit_log", "organization_invitations"}
 
 lock = threading.Lock()
 pending = {}   # one-time email token -> {email, challenge}
@@ -67,7 +67,7 @@ def conn():
 
 
 def user_obj(uid, email):
-    now = datetime.utcnow().isoformat() + "Z"
+    now = datetime.now(timezone.utc).isoformat()
     return {"id": uid, "aud": "authenticated", "role": "authenticated", "email": email, "email_confirmed_at": now,
             "app_metadata": {"provider": "email", "providers": ["email"]}, "user_metadata": {}, "identities": [],
             "created_at": now, "updated_at": now, "is_anonymous": False}
@@ -116,17 +116,17 @@ class Handler(BaseHTTPRequestHandler):
         self.send(status, {"code": status, "error_code": code, "msg": msg})
 
     def role(self):
-        """Returns (role, user_id) for the request."""
+        """Returns (role, claims) for the request."""
         auth = self.headers.get("Authorization", "")
         token = auth[7:] if auth.lower().startswith("bearer ") else ""
         if token in KEYS:
-            return KEYS[token], None
+            return KEYS[token], {}
         if token:
             claims = read_jwt(token)
             if not claims:
-                return None, None
-            return claims["role"], claims["sub"]
-        return KEYS.get(self.headers.get("apikey", "")), None
+                return None, {}
+            return claims["role"], claims
+        return KEYS.get(self.headers.get("apikey", "")), {}
 
     # -- routing ---------------------------------------------------------
     def do_GET(self):
@@ -137,6 +137,9 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_PATCH(self):
         self.route("PATCH")
+
+    def do_DELETE(self):
+        self.route("DELETE")
 
     def route(self, method):
         url = urlparse(self.path)
@@ -224,9 +227,12 @@ class Handler(BaseHTTPRequestHandler):
 
     # -- rest ------------------------------------------------------------
     def rest(self, method, table, raw_query):
-        role, uid = self.role()
+        role, claims = self.role()
+        uid = claims.get("sub")
         if role is None:
             return self.send(401, {"code": "PGRST301", "message": "JWT invalid", "details": None, "hint": None})
+        if table.startswith("rpc/"):
+            return self.rpc(role, claims, table[4:])
         if table not in TABLES:
             return self.send(404, {"code": "PGRST205", "message": f"Could not find the table 'public.{table}'"})
         params = parse_qs(raw_query, keep_blank_values=True)
@@ -284,6 +290,10 @@ class Handler(BaseHTTPRequestHandler):
             sets = sql.SQL(", ").join(sql.SQL("{} = %s").format(sql.Identifier(k)) for k in b)
             q = sql.SQL("update {} set {}{} returning {}").format(t, sets, where_sql, cols)
             args = list(b.values()) + args
+        elif method == "DELETE":
+            if not where:
+                return self.send(400, {"code": "21000", "message": "DELETE requires a WHERE clause"})
+            q = sql.SQL("delete from {}{} returning {}").format(t, where_sql, cols)
         else:
             return self.send(405, {"message": "method not allowed"})
 
@@ -291,7 +301,7 @@ class Handler(BaseHTTPRequestHandler):
             with conn() as c:
                 with c.cursor() as cur:
                     cur.execute(sql.SQL("set local role {}").format(sql.Identifier(role)))
-                    cur.execute("select set_config('request.jwt.claim.sub', %s, true)", (uid or "",))
+                    cur.execute("select set_config('request.jwt.claim.sub', %s, true), set_config('request.jwt.claims', %s, true)", (uid or "", json.dumps(claims) if claims else ""))
                     cur.execute(q, args)
                     names = [d.name for d in cur.description] if cur.description else []
                     out = [dict(zip(names, r)) for r in cur.fetchall()] if cur.description else []
@@ -301,7 +311,7 @@ class Handler(BaseHTTPRequestHandler):
             status = {"23505": 409, "23503": 409, "23514": 400, "22P02": 400, "P0001": 400, "42501": 403 if role != "anon" else 401}.get(code, 400)
             return self.send(status, {"code": code, "message": diag.message_primary or str(e), "details": diag.message_detail, "hint": diag.message_hint})
 
-        if method in ("POST", "PATCH") and not wants_rows:
+        if method in ("POST", "PATCH", "DELETE") and not wants_rows:
             return self.send(201 if method == "POST" else 204)
         if single:
             if len(out) != 1:
@@ -309,6 +319,38 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(201 if method == "POST" else 200, out[0])
         return self.send(201 if method == "POST" else 200, out)
 
+
+def _rpc(self, role, claims, fn):
+    if not IDENT.match(fn):
+        return self.send(404, {"code": "PGRST202", "message": "function not found"})
+    args = self.body() or {}
+    if not all(IDENT.match(k) for k in args):
+        return self.send(400, {"message": "bad argument"})
+    try:
+        with conn() as c:
+            with c.cursor() as cur:
+                meta = cur.execute("select proretset, prorettype::regtype::text from pg_proc where proname=%s and pronamespace='public'::regnamespace", (fn,)).fetchone()
+                if not meta:
+                    return self.send(404, {"code": "PGRST202", "message": f"Could not find the function public.{fn}"})
+                cur.execute(sql.SQL("set local role {}").format(sql.Identifier(role)))
+                cur.execute("select set_config('request.jwt.claim.sub', %s, true), set_config('request.jwt.claims', %s, true)", (claims.get("sub", ""), json.dumps(claims) if claims else ""))
+                call = sql.SQL("select * from {}({})").format(sql.Identifier("public", fn), sql.SQL(", ").join(sql.SQL("{} => %s").format(sql.Identifier(k)) for k in args))
+                cur.execute(call, list(args.values()))
+                names = [d.name for d in cur.description]
+                rows = [dict(zip(names, r)) for r in cur.fetchall()]
+    except psycopg.Error as e:
+        d = e.diag
+        code = d.sqlstate or "XX000"
+        status = {"42501": 403 if role != "anon" else 401, "P0002": 404}.get(code, 400)
+        return self.send(status, {"code": code, "message": d.message_primary or str(e), "details": d.message_detail, "hint": d.message_hint})
+    if meta[0]:
+        return self.send(200, rows)
+    if meta[1] == "void":
+        return self.send(204)
+    return self.send(200, rows[0][names[0]] if rows else None)
+
+
+Handler.rpc = _rpc
 
 if __name__ == "__main__":
     print(f"fake supabase on {PORT} using {DB}", flush=True)
