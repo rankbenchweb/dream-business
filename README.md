@@ -26,7 +26,7 @@ Copy `.env.example` to `.env.local` and fill in what you need.
 | Variable | Purpose |
 | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Production URL. Sets canonicals and the sitemap. **While unset, robots.txt blocks indexing.** |
-| `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | Store inquiries in Supabase (apply `supabase/migrations` first). Server-only. |
+| `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | Store inquiries in Supabase (apply `supabase/migrations/20261009000000_create_inquiries.sql` first). Server-only. |
 | `INQUIRY_WEBHOOK_URL` | Alternatively, or as well, POST each inquiry as JSON to a webhook such as n8n. |
 
 With no storage configured, the form validates normally but the API answers
@@ -64,3 +64,7 @@ src/app/globals.css      Design tokens (@theme): colour, type scale, radii, shad
 Any host that runs Next.js 16 on Node works. Netlify is the simplest fit with the
 existing account (zero-config Next.js support). Cloudflare requires the OpenNext
 adapter; check Cache Components compatibility before choosing it.
+
+## Database plan
+
+The Stage 2 schema (accounts, organizations, directory listings, campaigns, saved items) is written and tested but not applied. See `docs/database-stage2.md` before applying it.
