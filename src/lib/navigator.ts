@@ -53,6 +53,7 @@ const T = {
   roi: { title: "Test the return on investment", href: "/tools/roi-calculator", action: "Open the ROI calculator" },
   automate: { title: "Find tasks worth automating", href: "/tools/automation-planner", action: "Open the automation planner" },
   dropship: { title: "Check profit per order", href: "/tools/dropshipping-profit-calculator", action: "Open the dropshipping calculator" },
+  store: { title: "Compare store platform costs", href: "/tools/store-platform-cost-comparison", action: "Open the store platform comparison" },
   fba: { title: "Check marketplace profit", href: "/tools/amazon-fba-calculator", action: "Open the Amazon FBA calculator" },
 } as const;
 
@@ -94,6 +95,7 @@ export function buildPlan(goal: GoalKey, a: Answers): Plan {
       if (phys) steps.push(step("suppliers", "Get at least three quotes; compare cost, minimum order and lead time, not price alone."));
       if (phys) steps.push(step("landed", "If you import, add freight, duty and fees so your prices start from the real cost."));
       steps.push(step("margin", "Set a price that leaves a healthy margin after every per-unit cost."));
+      if (a.sells !== "services") steps.push(step("store", "See what each store platform costs to run at your expected sales."));
       steps.push(step("startup", "List one-off and monthly costs and see how many months your budget lasts."));
       steps.push(step("breakEven", "Find how many sales a month cover your fixed costs, and judge whether that is realistic."));
       steps.push(step("cash", "Project cash for the first year so a slow start doesn't end the business."));
