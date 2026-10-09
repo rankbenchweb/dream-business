@@ -16,7 +16,7 @@ const questions = [
   { q: "Are we pricing for the margin we need?", tool: "Profit margin calculator", href: "/tools/profit-margin-calculator", status: "live" as const },
   { q: "How many sales cover this month's costs?", tool: "Break-even calculator", href: "/tools/break-even-calculator", status: "live" as const },
   { q: "Does this investment pay back in time?", tool: "Return on investment calculator", href: "/tools/roi-calculator", status: "live" as const },
-  { q: "Which advertising spend actually returns profit?", tool: "Advertising profitability calculator", status: "building" as const },
+  { q: "Which advertising spend actually returns profit?", tool: "Advertising profitability calculator", href: "/tools/advertising-profitability-calculator", status: "live" as const },
 ];
 
 const international = [

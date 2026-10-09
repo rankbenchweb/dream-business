@@ -11,12 +11,12 @@ export const metadata = pageMetadata({
 
 const topics: { title: string; body: string; status: Status; href?: string; link?: string }[] = [
   { title: "Pricing and margins", body: "Margin versus markup, pricing for a target margin, and break-even.", status: "live", href: "/tools/profit-margin-calculator", link: "Start with the margin guide" },
-  { title: "Planning a new business", body: "Estimating launch costs, running costs and runway before you spend.", status: "live", href: "/tools/startup-cost-planner", link: "Read the startup costs guide" },
+  { title: "Planning a new business", body: "Choosing a business model, then estimating launch costs and runway.", status: "live", href: "/tools/startup-cost-planner", link: "Read the startup costs guide" },
   { title: "Importing and landed cost", body: "Freight, customs duty, CIF and FOB, and import tax on goods you buy abroad.", status: "live", href: "/tools/landed-cost-calculator", link: "Read the landed cost guide" },
   { title: "Sourcing and suppliers", body: "Finding manufacturers and evaluating suppliers before you order.", status: "planned" },
   { title: "Payments by country", body: "Which payment options are realistic in your country and how payouts work.", status: "planned" },
   { title: "Selling internationally", body: "Shipping, customs, marketplaces and tax when you sell across borders.", status: "planned" },
-  { title: "Marketing economics", body: "Acquisition cost, lifetime value and when advertising pays.", status: "planned" },
+  { title: "Marketing economics", body: "ROAS, cost per sale and when advertising pays.", status: "live", href: "/tools/advertising-profitability-calculator", link: "Read the advertising guide" },
 ];
 
 export default function LearnPage() {

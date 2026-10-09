@@ -20,6 +20,7 @@ const stages = [
     title: "Start a business",
     who: "You have an idea, or several, and want to test it before committing money.",
     links: [
+      { label: "Compare business models", href: "/tools/business-model-comparison" },
       { label: "Plan with the Business Builder", href: "/business-builder#start" },
       { label: "Estimate your startup costs", href: "/tools/startup-cost-planner" },
       { label: "Read the learning library", href: "/learn" },

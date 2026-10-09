@@ -32,7 +32,7 @@ export const divisions: Record<DivisionKey, Division> = {
     forWhom: "First-time founders, owners adding a new business line, and companies planning a new model.",
     capabilities: [
       { name: "Startup cost planner", detail: "Itemise launch and monthly costs and see your runway.", status: "live", href: "/tools/startup-cost-planner" },
-      { name: "Business model comparison", detail: "Compare models side by side on capital, margin, risk and effort.", status: "building" },
+      { name: "Business model comparison", detail: "Compare nine models on capital, risk, margin, speed, control and scale.", status: "live", href: "/tools/business-model-comparison" },
       { name: "Business plan builder", detail: "A structured plan you can save, revise and export.", status: "planned" },
       { name: "Launch checklist", detail: "Country-aware tasks for registration, payments, tax and launch.", status: "planned" },
       { name: "Business risk assessment", detail: "Identify concentration, supplier and regulatory risks early.", status: "planned" },
@@ -71,8 +71,8 @@ export const divisions: Record<DivisionKey, Division> = {
       { name: "Break-even calculator", detail: "Units and revenue needed to cover fixed costs and reach a profit target.", status: "live", href: "/tools/break-even-calculator" },
       { name: "Return on investment calculator", detail: "Return, annualised return and payback period for an investment.", status: "live", href: "/tools/roi-calculator" },
       { name: "Landed cost calculator", detail: "Freight, insurance, duty and import tax on imported goods.", status: "live", href: "/tools/landed-cost-calculator" },
-      { name: "Advertising profitability", detail: "Break-even ROAS and maximum cost per acquisition.", status: "building" },
-      { name: "Cash-flow planner", detail: "Monthly cash projection and funding gaps.", status: "planned" },
+      { name: "Advertising profitability", detail: "Break-even ROAS and the most you can pay per sale.", status: "live", href: "/tools/advertising-profitability-calculator" },
+      { name: "Cash-flow planner", detail: "Monthly cash projection and funding gaps.", status: "building" },
     ],
   },
   marketplace: {
@@ -123,6 +123,7 @@ export const divisions: Record<DivisionKey, Division> = {
     capabilities: [
       { name: "Profitability review", detail: "Start with margin and break-even, using the live calculators.", status: "live", href: "/tools/profit-margin-calculator" },
       { name: "Market expansion planner", detail: "Assess and sequence entry into new countries.", status: "planned" },
+      { name: "Advertising profitability", detail: "Know your break-even ROAS before you scale ad spend.", status: "live", href: "/tools/advertising-profitability-calculator" },
       { name: "Marketing strategy planner", detail: "Channel plans tied to acquisition cost and lifetime value.", status: "planned" },
       { name: "Operational cost analysis", detail: "Find the cost lines that grow faster than revenue.", status: "planned" },
       { name: "International selling guides", detail: "Country-specific guidance on payments, shipping and tax.", status: "planned" },

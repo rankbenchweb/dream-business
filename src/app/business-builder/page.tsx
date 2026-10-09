@@ -47,8 +47,8 @@ export default function BusinessBuilderPage() {
           <ButtonLink href="/tools/startup-cost-planner" variant="onDark">
             Plan your startup costs
           </ButtonLink>
-          <ButtonLink href="#start" variant="onDarkSecondary">
-            See how planning works
+          <ButtonLink href="/tools/business-model-comparison" variant="onDarkSecondary">
+            Compare business models
           </ButtonLink>
         </>
       }
