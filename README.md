@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# The Dream Business
 
-## Getting Started
+The Business Builder. *Where businesses build their future.*
 
-First, run the development server:
+Phase 1 foundation: brand design system, global navigation, homepage, six division
+pages, Business Promotion with a working inquiry flow, two live calculators,
+standards and policy pages, and SEO foundations.
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev          # http://localhost:3000
+npm run build && npm start
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Requires Node.js 20.9 or newer. Built on Next.js 16 (App Router, Cache Components),
+React 19, TypeScript and Tailwind CSS 4. Fonts are self-hosted via Fontsource, so the
+build needs no access to Google Fonts.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Configuration
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Copy `.env.example` to `.env.local` and fill in what you need.
 
-## Learn More
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | Production URL. Sets canonicals and the sitemap. **While unset, robots.txt blocks indexing.** |
+| `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | Store inquiries in Supabase (apply `supabase/migrations` first). Server-only. |
+| `INQUIRY_WEBHOOK_URL` | Alternatively, or as well, POST each inquiry as JSON to a webhook such as n8n. |
 
-To learn more about Next.js, take a look at the following resources:
+With no storage configured, the form validates normally but the API answers
+`503` and tells the visitor inquiries aren't switched on yet. Nothing is silently lost.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/app/                 Routes (one folder per page), sitemap.ts, robots.ts, api/inquiries
+src/components/ui.tsx   Design-system primitives: Container, Section, SectionHeading,
+                         ButtonLink/Button, TextLink, StatusBadge, StatusKey, PageHero,
+                         Breadcrumbs (+JSON-LD), CapabilityList, GridTexture, JsonLd
+src/components/layout/   SiteHeader (mega menu, mobile nav), SiteFooter, Logo,
+                         MarketSelector, SearchDialog
+src/components/          DivisionPage, PolicyPage, Disclosure labels, home/, tools/, forms/
+src/lib/                 Single sources of truth: site.ts (nav), divisions.ts, tools.ts,
+                         marketplace.ts, markets.ts, inquiry.ts (shared validation), seo.ts
+src/app/globals.css      Design tokens (@theme): colour, type scale, radii, shadows
+```
 
-## Deploy on Vercel
+## Rules this codebase follows
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Status is honest.** Every capability and tool carries `live`, `building` or
+  `planned` in `src/lib/divisions.ts` / `src/lib/tools.ts`. Only `live` items link to a
+  working page. Change the status when the feature ships, not before.
+- **One accent.** Signal teal is the only accent; brass is reserved for enterprise.
+- **Disclosure labels mean one thing each** (`Disclosure.tsx`): Verified, Editorial
+  pick, Sponsored, Affiliate link, Estimate. Never combine paid and verified.
+- **No fabricated content:** no statistics, testimonials, partner logos or listings.
+- Add a page: create the route, export `metadata` via `pageMetadata()`, add it to
+  `sitemap.ts`, and to `site.ts` if it belongs in navigation.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deployment
+
+Any host that runs Next.js 16 on Node works. Netlify is the simplest fit with the
+existing account (zero-config Next.js support). Cloudflare requires the OpenNext
+adapter; check Cache Components compatibility before choosing it.
