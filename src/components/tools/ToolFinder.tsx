@@ -50,11 +50,11 @@ export function ToolFinder({ limit, readQueryFromUrl = false }: { limit?: number
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search tools, e.g. margin"
-            className="h-11 w-full rounded-[var(--radius-sm)] border border-line-strong bg-surface pl-9 pr-3 text-sm text-ink placeholder:text-muted hover:border-ink focus:border-signal focus:outline-none"
+            className="h-11 w-full rounded-[var(--radius-sm)] border border-line-strong bg-surface pl-9 pr-3 text-sm text-ink placeholder:text-muted hover:border-ink focus:border-gold focus:outline-none"
           />
         </div>
         <label className="flex items-center gap-2 text-sm text-slate lg:ml-auto lg:order-last">
-          <input type="checkbox" checked={liveOnly} onChange={(e) => setLiveOnly(e.target.checked)} className="size-4 accent-[var(--color-signal)]" />
+          <input type="checkbox" checked={liveOnly} onChange={(e) => setLiveOnly(e.target.checked)} className="size-4 accent-[var(--color-gold)]" />
           Show live tools only
         </label>
         <div className="-mx-4 overflow-x-auto px-4 lg:mx-0 lg:px-0" role="group" aria-label="Filter by category">
@@ -94,7 +94,7 @@ export function ToolFinder({ limit, readQueryFromUrl = false }: { limit?: number
               setCategory("all");
               setLiveOnly(false);
             }}
-            className="mt-4 text-sm font-semibold text-signal-strong underline underline-offset-4"
+            className="mt-4 text-sm font-semibold text-gold-strong underline underline-offset-4"
           >
             Clear filters
           </button>
@@ -112,7 +112,7 @@ export function ToolFinder({ limit, readQueryFromUrl = false }: { limit?: number
                   <p className="mt-1 text-sm text-muted">{t.summary}</p>
                 </div>
                 <p className="text-xs text-muted sm:text-right">{t.category}</p>
-                <span className={cx("text-sm font-semibold sm:text-right", t.status === "live" ? "text-signal-strong" : "text-transparent")} aria-hidden={t.status !== "live"}>
+                <span className={cx("text-sm font-semibold sm:text-right", t.status === "live" ? "text-gold-strong" : "text-transparent")} aria-hidden={t.status !== "live"}>
                   {t.status === "live" ? "Open tool" : ""}
                 </span>
               </>
@@ -121,7 +121,7 @@ export function ToolFinder({ limit, readQueryFromUrl = false }: { limit?: number
             return (
               <li key={t.slug}>
                 {t.href ? (
-                  <Link href={t.href} className={cx(grid, "hover:bg-signal-soft/40")}>
+                  <Link href={t.href} className={cx(grid, "hover:bg-gold-soft/40")}>
                     {body}
                   </Link>
                 ) : (
@@ -137,7 +137,7 @@ export function ToolFinder({ limit, readQueryFromUrl = false }: { limit?: number
         <button
           type="button"
           onClick={() => setExpanded((e) => !e)}
-          className="mt-4 text-sm font-semibold text-signal-strong underline decoration-signal/30 decoration-2 underline-offset-4 hover:decoration-signal"
+          className="mt-4 text-sm font-semibold text-gold-strong underline decoration-gold/30 decoration-2 underline-offset-4 hover:decoration-gold"
           aria-expanded={expanded}
         >
           {expanded ? "Show fewer tools" : `Show all ${filtered.length} tools`}

@@ -110,7 +110,7 @@ export function SearchDialog({ triggerClassName, label = "Search" }: { triggerCl
           {shown.length === 0 ? (
             <li className="px-3 py-6 text-sm text-muted">
               Nothing matches “{query}”. Try a tool name such as “margin”, or browse{" "}
-              <Link href="/tools" onNavigate={close} className="font-semibold text-signal-strong underline underline-offset-4">
+              <Link href="/tools" onNavigate={close} className="font-semibold text-gold-strong underline underline-offset-4">
                 all business tools
               </Link>
               .
@@ -123,7 +123,7 @@ export function SearchDialog({ triggerClassName, label = "Search" }: { triggerCl
                   href={r.href}
                   onNavigate={close}
                   onMouseEnter={() => setActive(i)}
-                  className={`flex items-baseline justify-between gap-4 rounded-[var(--radius-md)] px-3 py-2.5 ${i === active ? "bg-signal-soft" : ""}`}
+                  className={`flex items-baseline justify-between gap-4 rounded-[var(--radius-md)] px-3 py-2.5 ${i === active ? "bg-gold-soft" : ""}`}
                 >
                   <span className="font-medium text-ink">{r.title}</span>
                   <span className="shrink-0 text-xs text-muted">{r.context}</span>

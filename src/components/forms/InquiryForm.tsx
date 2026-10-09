@@ -11,7 +11,7 @@ import { INQUIRY_TYPE_EVENT } from "./InquiryTypeLink";
 type State = { kind: "idle" } | { kind: "sending" } | { kind: "sent" } | { kind: "error"; message: string };
 
 const fieldBase =
-  "mt-2 w-full rounded-[var(--radius-sm)] border bg-surface px-3 text-base text-ink placeholder:text-muted/70 focus:border-signal focus:outline-none focus:ring-2 focus:ring-signal/20";
+  "mt-2 w-full rounded-[var(--radius-sm)] border bg-surface px-3 text-base text-ink placeholder:text-muted/70 focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20";
 
 function Field({ id, label, optional, error, hint, children }: { id: string; label: string; optional?: boolean; error?: string; hint?: string; children: ReactNode }) {
   return (
@@ -104,13 +104,13 @@ export function InquiryForm({ defaultType = "self-service", variant = "promotion
 
   if (state.kind === "sent") {
     return (
-      <div role="status" className="rounded-[var(--radius-md)] border border-signal/30 bg-signal-soft p-8">
+      <div role="status" className="rounded-[var(--radius-md)] border border-gold/30 bg-gold-soft p-8">
         <h3 className="text-xl">Inquiry sent</h3>
         <p className="mt-2 text-slate">
           Thanks, {values.name.split(" ")[0]}. We review every inquiry by hand and will reply to {values.email}. Promotions are never published until you
           have agreed the details and the campaign has passed review.
         </p>
-        <Link href="/" className="mt-5 inline-block text-sm font-semibold text-signal-strong underline underline-offset-4">
+        <Link href="/" className="mt-5 inline-block text-sm font-semibold text-gold-strong underline underline-offset-4">
           Back to the homepage
         </Link>
       </div>
@@ -208,10 +208,10 @@ export function InquiryForm({ defaultType = "self-service", variant = "promotion
 
       <div>
         <label className="flex items-start gap-3 text-sm text-slate">
-          <input type="checkbox" name="consent" checked={values.consent} onChange={(e) => set("consent", e.target.checked)} aria-invalid={!!errors.consent || undefined} aria-describedby={describedBy("consent")} className="mt-0.5 size-4 shrink-0 accent-[var(--color-signal)]" />
+          <input type="checkbox" name="consent" checked={values.consent} onChange={(e) => set("consent", e.target.checked)} aria-invalid={!!errors.consent || undefined} aria-describedby={describedBy("consent")} className="mt-0.5 size-4 shrink-0 accent-[var(--color-gold)]" />
           <span>
             You can use these details to reply to this inquiry. See the{" "}
-            <Link href="/privacy" className="font-semibold text-signal-strong underline underline-offset-4">
+            <Link href="/privacy" className="font-semibold text-gold-strong underline underline-offset-4">
               privacy policy
             </Link>
             .

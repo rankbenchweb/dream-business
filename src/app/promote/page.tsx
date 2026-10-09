@@ -156,7 +156,7 @@ export default function PromotePage() {
                   <li key={f.name} className="flex items-start justify-between gap-3 text-sm">
                     <span className={l.enterprise ? "text-fog" : "text-slate"}>{f.name}</span>
                     {f.status === "live" ? (
-                      <span className={cx("shrink-0 text-xs font-medium", l.enterprise ? "text-brass-bright" : "text-signal-strong")}>By inquiry</span>
+                      <span className={cx("shrink-0 text-xs font-medium", l.enterprise ? "text-brass-bright" : "text-gold-strong")}>By inquiry</span>
                     ) : (
                       <StatusBadge status={f.status} className={l.enterprise ? "!text-mist !ring-harbour-line" : undefined} />
                     )}
@@ -188,7 +188,7 @@ export default function PromotePage() {
         <ol className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {steps.map((s, i) => (
             <li key={s.title} className="relative border-t border-line-strong pt-5">
-              <span className="font-display text-sm font-semibold tabular-nums text-signal">Step {i + 1}</span>
+              <span className="font-display text-sm font-semibold tabular-nums text-gold">Step {i + 1}</span>
               <h3 className="mt-1 text-lg">{s.title}</h3>
               <p className="mt-2 text-sm text-muted">{s.body}</p>
             </li>

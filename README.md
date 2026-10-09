@@ -52,7 +52,7 @@ src/app/globals.css      Design tokens (@theme): colour, type scale, radii, shad
 - **Status is honest.** Every capability and tool carries `live`, `building` or
   `planned` in `src/lib/divisions.ts` / `src/lib/tools.ts`. Only `live` items link to a
   working page. Change the status when the feature ships, not before.
-- **One accent.** Signal teal is the only accent; brass is reserved for enterprise.
+- **One accent.** Gold (from the brand emblem) is the only accent; silver is the secondary metal; brass marks enterprise.
 - **Disclosure labels mean one thing each** (`Disclosure.tsx`): Verified, Editorial
   pick, Sponsored, Affiliate link, Estimate. Never combine paid and verified.
 - **No fabricated content:** no statistics, testimonials, partner logos or listings.

@@ -2,8 +2,10 @@
 
 /*
  * The Dream Business — design tokens
- * One accent (signal teal). Brass is reserved for enterprise only.
- * Midnight carries premium bands; paper carries content.
+ * Taken from the brand emblem: gold eyes on silver arcs, set on midnight.
+ * Gold is the single accent. Silver is the secondary metal for structure
+ * on dark surfaces. Brass marks enterprise. Midnight carries premium bands;
+ * paper carries content.
  */
 @theme {
   --color-midnight: #0d1b2e;
@@ -20,14 +22,18 @@
   --color-slate: #3b4859;
   --color-muted: #5d6b7c;
 
-  --color-signal: #0e7c80;
-  --color-signal-strong: #0a6366;
-  --color-signal-soft: #e3f2f2;
-  --color-signal-bright: #45c2be;
+  --color-gold: #8a6716;
+  --color-gold-strong: #6e5112;
+  --color-gold-soft: #f6edd8;
+  --color-gold-bright: #e2b048;
+  --color-gold-pale: #f7d681;
 
-  --color-brass: #a8823a;
+  --color-silver: #b4bdc8;
+  --color-silver-bright: #eef1f5;
+
+  --color-brass: #a87a22;
   --color-brass-soft: #f6efe1;
-  --color-brass-bright: #d9b46a;
+  --color-brass-bright: #f7d681;
 
   --color-danger: #b42318;
   --color-danger-soft: #fdecea;
@@ -96,17 +102,17 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-signal);
+    outline: 2px solid var(--color-gold);
     outline-offset: 3px;
     border-radius: 2px;
   }
 
   .on-dark :focus-visible {
-    outline-color: var(--color-signal-bright);
+    outline-color: var(--color-gold-bright);
   }
 
   ::selection {
-    background: var(--color-signal-soft);
+    background: var(--color-gold-soft);
     color: var(--color-ink);
   }
 }
@@ -137,7 +143,7 @@
     margin-top: 0.4em;
   }
   .prose-db a {
-    color: var(--color-signal-strong);
+    color: var(--color-gold-strong);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
@@ -165,4 +171,14 @@
   to {
     transform: scaleX(1);
   }
+}
+
+/* Emblem sparkle: a slow twinkle on the star highlights */
+@keyframes tdb-twinkle {
+  0%, 100% { opacity: 0.25; }
+  45% { opacity: 1; }
+  60% { opacity: 0.9; }
+}
+.tdb-sparkle {
+  animation: tdb-twinkle 3.6s ease-in-out infinite;
 }

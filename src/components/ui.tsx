@@ -65,9 +65,9 @@ export function SectionHeading({
 
 type Variant = "primary" | "secondary" | "onDark" | "onDarkSecondary" | "brass";
 const variantClass: Record<Variant, string> = {
-  primary: "bg-signal text-white hover:bg-signal-strong",
+  primary: "bg-gold text-white hover:bg-gold-strong",
   secondary: "border border-line-strong bg-surface text-ink hover:border-ink",
-  onDark: "bg-signal-bright text-midnight hover:bg-white",
+  onDark: "bg-gold-bright text-midnight hover:bg-white",
   onDarkSecondary: "border border-harbour-line text-white hover:border-mist hover:bg-harbour",
   brass: "bg-brass text-white hover:bg-[#8f6d2f]",
 };
@@ -96,7 +96,7 @@ export function TextLink({ className, ...props }: ComponentProps<typeof Link>) {
     <Link
       {...props}
       className={cx(
-        "font-semibold text-signal-strong underline decoration-signal/30 decoration-2 underline-offset-4 hover:decoration-signal [.on-dark_&]:text-signal-bright [.on-dark_&]:decoration-signal-bright/40",
+        "font-semibold text-gold-strong underline decoration-gold/30 decoration-2 underline-offset-4 hover:decoration-gold [.on-dark_&]:text-gold-bright [.on-dark_&]:decoration-gold-bright/40",
         className,
       )}
     />
@@ -104,7 +104,7 @@ export function TextLink({ className, ...props }: ComponentProps<typeof Link>) {
 }
 
 const statusClass: Record<Status, string> = {
-  live: "bg-signal-soft text-signal-strong ring-signal/25",
+  live: "bg-gold-soft text-gold-strong ring-gold/25",
   building: "bg-surface text-slate ring-line-strong",
   planned: "bg-transparent text-muted ring-line",
 };
@@ -118,7 +118,7 @@ export function StatusBadge({ status, className }: { status: Status; className?:
         className,
       )}
     >
-      {status === "live" ? <span aria-hidden className="size-1.5 rounded-full bg-signal" /> : null}
+      {status === "live" ? <span aria-hidden className="size-1.5 rounded-full bg-gold" /> : null}
       {statusLabel[status]}
     </span>
   );
@@ -174,13 +174,13 @@ export function PageHero({
   title,
   lead,
   children,
-  accent = "signal",
+  accent = "gold",
 }: {
   crumbs: { name: string; path: string }[];
   title: ReactNode;
   lead: ReactNode;
   children?: ReactNode;
-  accent?: "signal" | "brass";
+  accent?: "gold" | "brass";
 }) {
   return (
     <header className="on-dark relative overflow-hidden bg-midnight pb-14 pt-10 text-fog sm:pb-20 sm:pt-12">
@@ -190,7 +190,7 @@ export function PageHero({
         <div
           className={cx(
             "mt-8 max-w-[52rem] border-l-2 pl-5 sm:pl-7",
-            accent === "brass" ? "border-brass-bright" : "border-signal-bright",
+            accent === "brass" ? "border-brass-bright" : "border-gold-bright",
           )}
         >
           <h1 className="text-3xl text-white sm:text-4xl">{title}</h1>
@@ -219,7 +219,7 @@ export function CapabilityList({ items, className }: { items: Capability[]; clas
         <li key={c.name} className="grid gap-2 py-5 sm:grid-cols-[minmax(0,15rem)_1fr_auto] sm:items-baseline sm:gap-6">
           <h3 className="text-base font-semibold">
             {c.href ? (
-              <Link href={c.href} className="underline decoration-line-strong underline-offset-4 hover:decoration-signal">
+              <Link href={c.href} className="underline decoration-line-strong underline-offset-4 hover:decoration-gold">
                 {c.name}
               </Link>
             ) : (

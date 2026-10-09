@@ -36,7 +36,7 @@ export function ToolPage({
               {related.map((t) => (
                 <li key={t.slug} className="py-3">
                   {t.href ? (
-                    <Link href={t.href} className="text-sm font-semibold text-ink underline decoration-line-strong underline-offset-4 hover:decoration-signal">
+                    <Link href={t.href} className="text-sm font-semibold text-ink underline decoration-line-strong underline-offset-4 hover:decoration-gold">
                       {t.name}
                     </Link>
                   ) : (
@@ -48,7 +48,7 @@ export function ToolPage({
                 </li>
               ))}
             </ul>
-            <Link href="/tools" className="mt-4 inline-block text-sm font-semibold text-signal-strong underline underline-offset-4">
+            <Link href="/tools" className="mt-4 inline-block text-sm font-semibold text-gold-strong underline underline-offset-4">
               All business tools
             </Link>
           </aside>

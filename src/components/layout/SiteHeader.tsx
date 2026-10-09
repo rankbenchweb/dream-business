@@ -94,7 +94,7 @@ export function SiteHeader() {
       {/* Main row */}
       <div ref={navRef} className="relative border-b border-harbour">
         <Container wide className="flex h-16 items-center gap-3 sm:gap-6">
-          <Logo onNavigate={closeAll} />
+          <Logo id="tdb-h" onNavigate={closeAll} />
 
           <nav aria-label="Primary" className="ml-auto hidden xl:block">
             <ul className="flex items-center">
@@ -121,7 +121,7 @@ export function SiteHeader() {
                       <span
                         aria-hidden
                         className={cx(
-                          "absolute inset-x-2 bottom-0 h-0.5 bg-signal-bright transition-opacity 2xl:inset-x-3",
+                          "absolute inset-x-2 bottom-0 h-0.5 bg-gold-bright transition-opacity 2xl:inset-x-3",
                           active || expanded ? "opacity-100" : "opacity-0",
                         )}
                       />
@@ -173,7 +173,7 @@ export function SiteHeader() {
                 <Link
                   href={group.href}
                   onNavigate={closeAll}
-                  className="mt-5 inline-block text-sm font-semibold text-signal-strong underline decoration-signal/30 decoration-2 underline-offset-4 hover:decoration-signal"
+                  className="mt-5 inline-block text-sm font-semibold text-gold-strong underline decoration-gold/30 decoration-2 underline-offset-4 hover:decoration-gold"
                 >
                   Go to {group.label}
                 </Link>

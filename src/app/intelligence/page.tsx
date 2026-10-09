@@ -66,7 +66,7 @@ export default function IntelligencePage() {
             <ul className="mt-5 space-y-4">
               {commitments.map((c) => (
                 <li key={c} className="flex gap-3 text-sm text-slate">
-                  <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-signal" />
+                  <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-gold" />
                   {c}
                 </li>
               ))}

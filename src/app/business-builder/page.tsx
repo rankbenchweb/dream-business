@@ -67,7 +67,7 @@ export default function BusinessBuilderPage() {
               <ul className="mt-6 space-y-3">
                 {p.questions.map((q) => (
                   <li key={q} className="flex gap-3 text-sm text-slate">
-                    <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-signal" />
+                    <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-gold" />
                     {q}
                   </li>
                 ))}

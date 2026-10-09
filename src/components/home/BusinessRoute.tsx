@@ -30,7 +30,7 @@ export function BusinessRoute() {
         <span aria-hidden className="absolute left-[4.5%] right-[4.5%] top-[7px] h-0.5 bg-harbour-line" />
         <span
           aria-hidden
-          className="absolute left-[4.5%] right-[4.5%] top-[7px] h-0.5 origin-left bg-signal-bright motion-safe:animate-[route-draw_1.6s_cubic-bezier(.6,0,.2,1)_.2s_both]"
+          className="absolute left-[4.5%] right-[4.5%] top-[7px] h-0.5 origin-left bg-gold-bright motion-safe:animate-[route-draw_1.6s_cubic-bezier(.6,0,.2,1)_.2s_both]"
         />
         {businessRoute.map((s, i) => {
           const d = divisions[s.division];
@@ -40,8 +40,8 @@ export function BusinessRoute() {
                 <span
                   aria-hidden
                   className={cx(
-                    "relative z-10 block size-4 rounded-full border-2 border-signal-bright bg-midnight transition-colors group-hover:bg-signal-bright",
-                    i === businessRoute.length - 1 && "bg-signal-bright",
+                    "relative z-10 block size-4 rounded-full border-2 border-gold-bright bg-midnight transition-colors group-hover:bg-gold-bright",
+                    i === businessRoute.length - 1 && "bg-gold-bright",
                   )}
                 />
                 <span className="mt-3 text-[0.6875rem] tabular-nums text-mist">{String(i + 1).padStart(2, "0")}</span>
@@ -60,7 +60,7 @@ export function BusinessRoute() {
           return (
             <li key={s.stage} className="relative pl-8">
               <span aria-hidden className="absolute bottom-0 left-[7px] top-0 w-0.5 bg-harbour-line" />
-              <span aria-hidden className="absolute left-0 top-[14px] size-4 rounded-full border-2 border-signal-bright bg-midnight" />
+              <span aria-hidden className="absolute left-0 top-[14px] size-4 rounded-full border-2 border-gold-bright bg-midnight" />
               <Link href={d.href} className="flex items-baseline gap-3 py-2.5">
                 <span className="w-5 text-xs tabular-nums text-mist">{String(i + 1).padStart(2, "0")}</span>
                 <span className="font-semibold text-white">{s.stage}</span>
@@ -84,7 +84,7 @@ export function BusinessRoute() {
                 onBlur={() => setFocus(null)}
                 className={cx(
                   "inline-flex h-8 items-center rounded-full border px-3 text-xs font-medium transition-colors",
-                  focus === k ? "border-signal-bright bg-signal-bright text-midnight" : "border-harbour-line text-fog hover:border-mist",
+                  focus === k ? "border-gold-bright bg-gold-bright text-midnight" : "border-harbour-line text-fog hover:border-mist",
                 )}
               >
                 {divisions[k].name}

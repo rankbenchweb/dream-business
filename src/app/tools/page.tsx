@@ -49,7 +49,7 @@ export default function ToolsPage() {
         <SectionHeading id="principles-heading" title="How our tools work" />
         <ul className="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
           {principles.map((p) => (
-            <li key={p.title} className="border-t-2 border-signal pt-5">
+            <li key={p.title} className="border-t-2 border-gold pt-5">
               <h3 className="text-base font-semibold">{p.title}</h3>
               <p className="mt-2 text-sm text-muted">{p.body}</p>
             </li>

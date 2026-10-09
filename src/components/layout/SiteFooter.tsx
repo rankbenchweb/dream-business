@@ -8,7 +8,7 @@ export function SiteFooter() {
     <footer className="on-dark bg-midnight text-fog">
       <Container className="grid gap-12 py-16 lg:grid-cols-[minmax(0,20rem)_1fr] lg:gap-16">
         <div>
-          <Logo />
+          <Logo id="tdb-f" />
           <p className="mt-6 font-display text-xl font-semibold tracking-[-0.02em] text-white">{site.tagline}</p>
           <p className="mt-3 max-w-[22rem] text-sm text-mist">
             Practical tools, transparent business discovery and clearly labelled promotion for businesses at every stage.

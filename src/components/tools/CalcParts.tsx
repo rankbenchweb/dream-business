@@ -37,7 +37,7 @@ export function NumberField({
       ) : null}
       <div
         className={cx(
-          "mt-2 flex h-12 items-center rounded-[var(--radius-sm)] border bg-surface focus-within:border-signal focus-within:ring-2 focus-within:ring-signal/20",
+          "mt-2 flex h-12 items-center rounded-[var(--radius-sm)] border bg-surface focus-within:border-gold focus-within:ring-2 focus-within:ring-gold/20",
           error ? "border-danger" : "border-line-strong hover:border-ink",
         )}
       >

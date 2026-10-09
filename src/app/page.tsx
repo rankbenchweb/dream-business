@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { BusinessRoute } from "@/components/home/BusinessRoute";
+import { Emblem } from "@/components/layout/Logo";
 import { ToolFinder } from "@/components/tools/ToolFinder";
 import { DisclosureLabel, disclosures, type DisclosureKind } from "@/components/Disclosure";
 import { ButtonLink, Container, GridTexture, Section, SectionHeading, StatusBadge, TextLink, cx } from "@/components/ui";
@@ -87,17 +88,25 @@ export default function HomePage() {
       {/* Hero */}
       <section aria-labelledby="hero-heading" className="on-dark relative overflow-hidden bg-midnight text-fog">
         <GridTexture />
-        <Container className="relative pb-16 pt-14 sm:pt-20 lg:pb-20 lg:pt-24">
-          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,27rem)] lg:items-end lg:gap-16">
+        <Container className="relative pb-16 pt-12 sm:pt-16 lg:pb-20 lg:pt-16">
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,27rem)] lg:items-center lg:gap-16">
             <div>
-              <p className="text-sm font-medium text-signal-bright">{site.name}, the business builder</p>
+              <Emblem id="tdb-hero-m" glow sparkle className="mb-6 size-20 lg:hidden" />
+              <p className="text-sm font-medium text-gold-bright">{site.name}, the business builder</p>
               <h1 id="hero-heading" className="mt-5 text-[2.75rem] font-bold leading-[0.98] tracking-[-0.035em] text-white sm:text-5xl lg:text-[5.75rem]">
                 <span className="block">Your vision.</span>
                 <span className="block text-fog">Your business.</span>
                 <span className="block text-mist">Your future.</span>
               </h1>
             </div>
-            <div className="lg:pb-2">
+            <div>
+              <div className="relative mb-8 hidden lg:block">
+                <span
+                  aria-hidden
+                  className="absolute left-[-3rem] top-1/2 size-72 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgb(226_176_72/0.22),transparent_65%)]"
+                />
+                <Emblem id="tdb-hero" glow sparkle className="relative size-44" />
+              </div>
               <p className="text-lg text-fog">
                 Discover opportunities, use practical business tools, connect with suppliers and services, and promote your brand. From your first venture
                 to your next international expansion.
@@ -143,7 +152,7 @@ export default function HomePage() {
                   <div>
                     <p className="text-xs tabular-nums text-muted">Division {i + 1} of 6</p>
                     <h3 className="mt-1 text-xl">
-                      <Link href={d.href} className="hover:text-signal-strong">
+                      <Link href={d.href} className="hover:text-gold-strong">
                         {d.name}
                       </Link>
                     </h3>
@@ -197,7 +206,7 @@ export default function HomePage() {
               {/* Stepped bar: rises with each stage */}
               <div aria-hidden className="flex h-12 items-end">
                 <span
-                  className={cx("block w-10 rounded-t-[2px]", i === 3 ? "bg-brass" : "bg-signal")}
+                  className={cx("block w-10 rounded-t-[2px]", i === 3 ? "bg-brass" : "bg-gold")}
                   style={{ height: `${25 + i * 25}%`, opacity: 0.45 + i * 0.18 }}
                 />
               </div>
@@ -206,7 +215,7 @@ export default function HomePage() {
               <ul className="mt-6 space-y-2.5 border-t border-line pt-5 text-sm">
                 {s.links.map((l) => (
                   <li key={l.href}>
-                    <Link href={l.href} className="font-medium text-ink underline decoration-line-strong underline-offset-4 hover:decoration-signal">
+                    <Link href={l.href} className="font-medium text-ink underline decoration-line-strong underline-offset-4 hover:decoration-gold">
                       {l.label}
                     </Link>
                   </li>

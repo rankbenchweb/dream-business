@@ -18,7 +18,7 @@ export function DivisionPage({
   actions?: ReactNode;
   capabilityTitle?: string;
   children?: ReactNode;
-  accent?: "signal" | "brass";
+  accent?: "gold" | "brass";
 }) {
   const d = divisions[division];
   const others = divisionOrder.filter((k) => k !== division);

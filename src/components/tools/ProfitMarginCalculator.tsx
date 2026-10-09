@@ -55,7 +55,7 @@ export function ProfitMarginCalculator() {
               <label
                 key={m}
                 className={cx(
-                  "cursor-pointer rounded-[3px] px-3 py-2 text-sm font-medium has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-signal",
+                  "cursor-pointer rounded-[3px] px-3 py-2 text-sm font-medium has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-gold",
                   mode === m ? "bg-ink text-white" : "text-slate hover:text-ink",
                 )}
               >
