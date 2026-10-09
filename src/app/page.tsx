@@ -21,7 +21,7 @@ const stages = [
     who: "You have an idea, or several, and want to test it before committing money.",
     links: [
       { label: "Plan with the Business Builder", href: "/business-builder#start" },
-      { label: "Check your break-even point", href: "/tools/break-even-calculator" },
+      { label: "Estimate your startup costs", href: "/tools/startup-cost-planner" },
       { label: "Read the learning library", href: "/learn" },
     ],
   },
@@ -48,6 +48,7 @@ const stages = [
     who: "You lead a larger organisation looking for markets, partners and business customers.",
     links: [
       { label: "Discuss an enterprise campaign", href: "/promote#enterprise" },
+      { label: "Calculate landed import costs", href: "/tools/landed-cost-calculator" },
       { label: "Plan international expansion", href: "/growth#international" },
       { label: "Find distributors and partners", href: "/marketplace" },
     ],

@@ -72,7 +72,16 @@ export function ResultRow({ label, value, emphasis, note }: { label: string; val
         {label}
         {note ? <span className="block text-xs text-mist/80">{note}</span> : null}
       </dt>
-      <dd className={cx("text-right font-display tracking-[-0.01em] text-white", emphasis ? "text-3xl font-semibold" : "text-lg font-medium")}>
+      <dd
+        className={cx(
+          "text-right font-display tracking-[-0.01em] text-white",
+          emphasis
+            ? typeof value === "string" && value.length > 12
+              ? "text-xl font-semibold"
+              : "whitespace-nowrap text-3xl font-semibold"
+            : "text-lg font-medium",
+        )}
+      >
         {value}
       </dd>
     </div>
@@ -101,5 +110,80 @@ export function currencySymbol(locale: string, currency: string) {
     new Intl.NumberFormat(locale, { style: "currency", currency, currencyDisplay: "narrowSymbol" })
       .formatToParts(0)
       .find((p) => p.type === "currency")?.value ?? currency
+  );
+}
+
+/**
+ * Standard calculator layout: inputs, then results, then method. On desktop
+ * the results sit in a sticky column beside inputs and method.
+ */
+export function CalcLayout({ inputs, results, method, label }: { inputs: ReactNode; results: ReactNode; method: ReactNode; label: string }) {
+  return (
+    <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] lg:gap-x-12">
+      <form className="space-y-6 lg:col-start-1 lg:row-start-1" onSubmit={(e) => e.preventDefault()} aria-label={label}>
+        {inputs}
+      </form>
+      <div className="self-start lg:sticky lg:top-36 lg:col-start-2 lg:row-span-2 lg:row-start-1">{results}</div>
+      <div className="lg:col-start-1 lg:row-start-2">{method}</div>
+    </div>
+  );
+}
+
+export function MethodNote({ formulas, children }: { formulas: ReactNode[]; children?: ReactNode }) {
+  return (
+    <div className="rounded-[var(--radius-md)] border border-line bg-surface p-5 text-sm text-slate">
+      <h2 className="text-sm font-semibold text-ink">How this is calculated</h2>
+      <ul className="mt-2 space-y-1">
+        {formulas.map((f, i) => (
+          <li key={i}>{f}</li>
+        ))}
+      </ul>
+      {children ? <div className="mt-3 space-y-2 text-xs text-muted">{children}</div> : null}
+    </div>
+  );
+}
+
+export function Segmented<T extends string>({
+  legend,
+  name,
+  value,
+  options,
+  onChange,
+}: {
+  legend: string;
+  name: string;
+  value: T;
+  options: readonly (readonly [T, string])[];
+  onChange: (v: T) => void;
+}) {
+  return (
+    <fieldset>
+      <legend className="text-sm font-semibold text-ink">{legend}</legend>
+      <div className="mt-2 inline-flex flex-wrap rounded-[var(--radius-sm)] border border-line-strong bg-surface p-1">
+        {options.map(([v, label]) => (
+          <label
+            key={v}
+            className={cx(
+              "cursor-pointer rounded-[3px] px-3 py-2 text-sm font-medium has-[:focus-visible]:outline has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-gold",
+              value === v ? "bg-ink text-white" : "text-slate hover:text-ink",
+            )}
+          >
+            <input type="radio" name={name} value={v} checked={value === v} onChange={() => onChange(v)} className="sr-only" />
+            {label}
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
+export const fmtPct = (n: number, digits = 1) => (Number.isFinite(n) ? `${n.toLocaleString("en", { maximumFractionDigits: digits })}%` : "—");
+
+export function MarketNote({ label, currency }: { label: string; currency: string }) {
+  return (
+    <p>
+      Amounts use the {label} market ({currency}); change it with the market selector in the header. Everything is calculated in your browser and
+      nothing you enter is sent to us.
+    </p>
   );
 }

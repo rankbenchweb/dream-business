@@ -22,7 +22,7 @@ const paths = [
       "How many sales do I need before it pays for itself?",
       "What has to be in place before launch in my country?",
     ],
-    now: { label: "Check how many sales you need with the break-even calculator", href: "/tools/break-even-calculator" },
+    now: { label: "Plan your launch budget and runway with the startup cost planner", href: "/tools/startup-cost-planner" },
   },
   {
     id: "expand",
@@ -44,8 +44,8 @@ export default function BusinessBuilderPage() {
       division="builder"
       actions={
         <>
-          <ButtonLink href="/tools/break-even-calculator" variant="onDark">
-            Check your break-even point
+          <ButtonLink href="/tools/startup-cost-planner" variant="onDark">
+            Plan your startup costs
           </ButtonLink>
           <ButtonLink href="#start" variant="onDarkSecondary">
             See how planning works

@@ -31,8 +31,8 @@ export const divisions: Record<DivisionKey, Division> = {
       "The Builder turns an objective into a plan: which model fits, what it will cost, what has to happen first. It works the same way for a first venture and for an established company adding a new line or market.",
     forWhom: "First-time founders, owners adding a new business line, and companies planning a new model.",
     capabilities: [
-      { name: "Startup cost planner", detail: "Itemise launch and monthly costs and see your runway.", status: "building" },
-      { name: "Business model comparison", detail: "Compare models side by side on capital, margin, risk and effort.", status: "planned" },
+      { name: "Startup cost planner", detail: "Itemise launch and monthly costs and see your runway.", status: "live", href: "/tools/startup-cost-planner" },
+      { name: "Business model comparison", detail: "Compare models side by side on capital, margin, risk and effort.", status: "building" },
       { name: "Business plan builder", detail: "A structured plan you can save, revise and export.", status: "planned" },
       { name: "Launch checklist", detail: "Country-aware tasks for registration, payments, tax and launch.", status: "planned" },
       { name: "Business risk assessment", detail: "Identify concentration, supplier and regulatory risks early.", status: "planned" },
@@ -69,9 +69,9 @@ export const divisions: Record<DivisionKey, Division> = {
     capabilities: [
       { name: "Profit margin calculator", detail: "Margin, markup and profit per unit — or the price for a target margin.", status: "live", href: "/tools/profit-margin-calculator" },
       { name: "Break-even calculator", detail: "Units and revenue needed to cover fixed costs and reach a profit target.", status: "live", href: "/tools/break-even-calculator" },
-      { name: "Return on investment calculator", detail: "Return and payback period for an investment.", status: "building" },
-      { name: "Landed cost calculator", detail: "Freight, duty and handling on imported goods.", status: "planned" },
-      { name: "Advertising profitability", detail: "Break-even ROAS and maximum cost per acquisition.", status: "planned" },
+      { name: "Return on investment calculator", detail: "Return, annualised return and payback period for an investment.", status: "live", href: "/tools/roi-calculator" },
+      { name: "Landed cost calculator", detail: "Freight, insurance, duty and import tax on imported goods.", status: "live", href: "/tools/landed-cost-calculator" },
+      { name: "Advertising profitability", detail: "Break-even ROAS and maximum cost per acquisition.", status: "building" },
       { name: "Cash-flow planner", detail: "Monthly cash projection and funding gaps.", status: "planned" },
     ],
   },
