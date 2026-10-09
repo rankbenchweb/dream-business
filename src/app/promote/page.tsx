@@ -5,6 +5,7 @@ import { ButtonLink, Container, PageHero, Section, SectionHeading, StatusBadge, 
 import { promotableTypes } from "@/lib/marketplace";
 import { pageMetadata } from "@/lib/seo";
 import type { Status } from "@/lib/tools";
+import { accountsEnabled } from "@/lib/supabase/config";
 
 export const metadata = pageMetadata({
   title: "Promote your business to founders and business owners",
@@ -109,7 +110,12 @@ export default function PromotePage() {
         title="Put your business in front of the right audience."
         lead="People come to The Dream Business when they need a supplier, a tool, a service or the skills to grow. If your company provides those things, you can reach them here, with every placement reviewed and clearly labelled."
       >
-        <ButtonLink href="#inquiry" variant="onDark">
+        {accountsEnabled ? (
+          <ButtonLink href="/sign-in?next=/account/campaigns/new" variant="onDark">
+            Submit a campaign
+          </ButtonLink>
+        ) : null}
+        <ButtonLink href="#inquiry" variant={accountsEnabled ? "onDarkSecondary" : "onDark"}>
           Start a promotion inquiry
         </ButtonLink>
         <ButtonLink href="#enterprise" variant="onDarkSecondary">

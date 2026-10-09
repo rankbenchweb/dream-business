@@ -2,7 +2,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { AccountsClosed, ListingStatusBadge, Loading, Notice } from "@/components/account/Shared";
 import { ButtonLink, PageHero, Section, TextLink } from "@/components/ui";
-import { getCategories, getListingsForOrgs, getMyInvitations, getMyOrganizations } from "@/lib/accountData";
+import { getCampaignsForOrgs, getCategories, getListingsForOrgs, getMyInvitations, getMyOrganizations } from "@/lib/accountData";
+import { campaignStatusLabel, canManageCampaigns, canViewCampaigns, placements } from "@/lib/campaigns";
 import { respondToInvitation } from "./team/actions";
 import { isStaffEmail, requireUser } from "@/lib/auth";
 import { canEditListings, canManageTeam, listingStatusHelp, roleLabel } from "@/lib/listings";
@@ -41,7 +42,11 @@ async function AccountBody({ searchParams }: { searchParams: Search }) {
   const user = await requireUser("/account");
   const { notice } = await searchParams;
   const [orgs, invitations] = await Promise.all([getMyOrganizations(user.id), getMyInvitations()]);
-  const [listings, categories] = await Promise.all([getListingsForOrgs(orgs.map((o) => o.id)), getCategories()]);
+  const [listings, categories, campaigns] = await Promise.all([
+    getListingsForOrgs(orgs.map((o) => o.id)),
+    getCategories(),
+    getCampaignsForOrgs(orgs.filter((o) => canViewCampaigns(o.role)).map((o) => o.id)),
+  ]);
   const catName = new Map(categories.map((c) => [c.id, c.name]));
 
   return (
@@ -160,6 +165,43 @@ async function AccountBody({ searchParams }: { searchParams: Search }) {
                     No listings yet.{canEdit ? " Add one to appear in the business directory once it's reviewed." : ""}
                   </p>
                 )}
+                {canViewCampaigns(org.role) ? (
+                  <div className="mt-8">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <h3 className="text-lg">Promotion campaigns</h3>
+                      {canManageCampaigns(org.role) ? (
+                        <ButtonLink href={`/account/campaigns/new?org=${org.id}`} variant="secondary">
+                          New campaign<span className="sr-only"> for {org.name}</span>
+                        </ButtonLink>
+                      ) : null}
+                    </div>
+                    {campaigns.some((c) => c.organization_id === org.id) ? (
+                      <ul className="mt-4 divide-y divide-line rounded-[var(--radius-md)] border border-line">
+                        {campaigns
+                          .filter((c) => c.organization_id === org.id)
+                          .map((c) => (
+                            <li key={c.id} className="flex flex-col gap-2 p-5 sm:flex-row sm:items-center sm:justify-between">
+                              <div className="min-w-0">
+                                <div className="flex flex-wrap items-center gap-2">
+                                  <Link href={`/account/campaign?id=${c.id}`} className="font-semibold text-ink underline decoration-line-strong underline-offset-4 hover:decoration-ink">
+                                    {c.name}
+                                  </Link>
+                                  <span className="inline-flex items-center rounded-full bg-brass-soft px-2.5 py-0.5 text-xs font-semibold text-[#6b5120] ring-1 ring-brass/40">
+                                    {campaignStatusLabel[c.status]}
+                                  </span>
+                                </div>
+                                <p className="mt-1 text-sm text-muted">
+                                  {placements.find((p) => p.value === c.placement)?.label} · Updated {dateFmt.format(new Date(c.updated_at))}
+                                </p>
+                              </div>
+                            </li>
+                          ))}
+                      </ul>
+                    ) : (
+                      <p className="mt-4 text-sm text-muted">No campaigns yet. Promotion is optional and never affects your listing&apos;s review.</p>
+                    )}
+                  </div>
+                ) : null}
               </section>
             );
           })}

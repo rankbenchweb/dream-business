@@ -40,3 +40,32 @@ export async function reviewListing(form: FormData): Promise<void> {
   refreshDirectory();
   redirect(`/staff/review?notice=${decision}`);
 }
+
+const CAMPAIGN_DECISIONS: Record<string, { from: string[]; to: string; notice: string }> = {
+  approve: { from: ["submitted"], to: "approved", notice: "approve" },
+  return: { from: ["submitted", "approved"], to: "rejected", notice: "return-campaign" },
+  live: { from: ["approved", "paused"], to: "live", notice: "go-live" },
+  pause: { from: ["live"], to: "paused", notice: "staff-pause" },
+  end: { from: ["approved", "live", "paused"], to: "ended", notice: "end" },
+};
+
+export async function reviewCampaign(form: FormData): Promise<void> {
+  await requireStaff();
+  const id = String(form.get("campaignId") ?? "");
+  const d = CAMPAIGN_DECISIONS[String(form.get("decision") ?? "")];
+  const note = String(form.get("note") ?? "").trim().slice(0, 1000);
+  if (!ID.test(id) || !d) redirect("/staff/review?notice=invalid#campaigns");
+  if (d.to === "rejected" && note.length < 10) redirect(`/staff/review?notice=note-needed#campaign-${id}`);
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from("campaigns")
+    .update(d.to === "rejected" ? { status: d.to, review_note: note } : { status: d.to })
+    .eq("id", id)
+    .in("status", d.from)
+    .select("id");
+  if (error || !data?.length) {
+    console.error("campaign review failed:", error?.code, error?.message);
+    redirect("/staff/review?notice=failed#campaigns");
+  }
+  redirect(`/staff/review?notice=${d.notice}#campaigns`);
+}

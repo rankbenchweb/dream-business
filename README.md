@@ -71,4 +71,4 @@ The Stage 2 schema (accounts, organizations, directory listings, campaigns, save
 
 ## Business accounts
 
-Sign-in, business profiles, teams and invitations, listing submission, staff review and the public directory are built and switched off until Supabase is configured. See `docs/accounts-setup.md`. Tests: `supabase/tests/stage2_policies.py` and `supabase/tests/invitation_policies.py` (database rules), `supabase/tests/e2e/` (browser) and `supabase/tests/fake_supabase.py` (local stand-in used for end-to-end tests).
+Sign-in, business profiles, teams and invitations, listing submission, campaign submission, staff review and the public directory are built and switched off until Supabase is configured. See `docs/accounts-setup.md`. Tests: `supabase/tests/stage2_policies.py` and `supabase/tests/invitation_policies.py` (database rules), `supabase/tests/e2e/` (browser) and `supabase/tests/fake_supabase.py` (local stand-in used for end-to-end tests).

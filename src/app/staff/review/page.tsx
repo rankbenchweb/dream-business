@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { reviewListing } from "@/app/staff/actions";
+import { reviewCampaign, reviewListing } from "@/app/staff/actions";
+import { campaignStatusLabel, placements, tiers, type CampaignStatus } from "@/lib/campaigns";
 import { AccountsClosed, ListingStatusBadge, Loading, Notice } from "@/components/account/Shared";
 import { PageHero, Section, TextLink } from "@/components/ui";
 import { getCurrentUser, isStaffEmail } from "@/lib/auth";
@@ -58,6 +59,42 @@ type Row = {
   published_at: string | null;
 };
 
+type CampaignRow = {
+  id: string;
+  organization_id: string;
+  name: string;
+  tier: string;
+  placement: string;
+  destination_url: string;
+  headline: string;
+  body: string | null;
+  starts_on: string | null;
+  ends_on: string | null;
+  budget_note: string | null;
+  status: CampaignStatus;
+  submitted_at: string | null;
+};
+
+const campaignActions: Record<string, { decision: string; label: string; primary?: boolean }[]> = {
+  submitted: [
+    { decision: "approve", label: "Approve", primary: true },
+    { decision: "return", label: "Return with note" },
+  ],
+  approved: [
+    { decision: "live", label: "Mark as live", primary: true },
+    { decision: "return", label: "Return with note" },
+    { decision: "end", label: "End" },
+  ],
+  live: [
+    { decision: "pause", label: "Pause" },
+    { decision: "end", label: "End" },
+  ],
+  paused: [
+    { decision: "live", label: "Resume", primary: true },
+    { decision: "end", label: "End" },
+  ],
+};
+
 const marketName = new Map(serviceMarkets.map((m) => [m.code, m.label]));
 const dateFmt = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "UTC" });
 const btn = "inline-flex min-h-11 items-center justify-center rounded-[var(--radius-sm)] px-4 text-sm font-semibold";
@@ -70,14 +107,21 @@ async function Body({ searchParams }: { searchParams: Search }) {
 
   const admin = createAdminClient();
   const cols = "id,organization_id,category_id,name,summary,description,website,headquarters,serves_markets,status,verification,verified_scope,submitted_at,published_at";
-  const [queue, live, cats] = await Promise.all([
+  const [queue, live, cats, camps] = await Promise.all([
     admin.from("business_listings").select(cols).eq("status", "submitted").order("submitted_at", { ascending: true }).limit(100),
     admin.from("business_listings").select(cols).eq("status", "published").order("published_at", { ascending: false }).limit(100),
     admin.from("listing_categories").select("id,name"),
+    admin
+      .from("campaigns")
+      .select("id,organization_id,name,tier,placement,destination_url,headline,body,starts_on,ends_on,budget_note,status,submitted_at")
+      .in("status", ["submitted", "approved", "live", "paused"])
+      .order("submitted_at", { ascending: true })
+      .limit(200),
   ]);
-  if (queue.error || live.error || cats.error) throw new Error("Review queue could not load");
+  if (queue.error || live.error || cats.error || camps.error) throw new Error("Review queue could not load");
+  const campaigns = (camps.data ?? []) as CampaignRow[];
   const rows = [...(queue.data ?? []), ...(live.data ?? [])] as Row[];
-  const orgIds = Array.from(new Set(rows.map((r) => r.organization_id)));
+  const orgIds = Array.from(new Set([...rows.map((r) => r.organization_id), ...campaigns.map((c) => c.organization_id)]));
   const orgs = orgIds.length ? await admin.from("organizations").select("id,name,website,country").in("id", orgIds) : { data: [], error: null };
   if (orgs.error) throw new Error("Review queue could not load");
   const orgOf = new Map((orgs.data ?? []).map((o) => [o.id as string, o as { name: string; website: string | null; country: string | null }]));
@@ -180,6 +224,100 @@ async function Body({ searchParams }: { searchParams: Search }) {
           Live listings ({published.length})
         </h2>
         {published.length ? <ul className="mt-6 space-y-6">{published.map(card)}</ul> : <p className="mt-4 text-sm text-muted">No live listings yet.</p>}
+      </section>
+      <section id="campaigns" aria-labelledby="campaigns-heading" className="mt-16 scroll-mt-24">
+        <h2 id="campaigns-heading" className="text-2xl">
+          Campaigns ({campaigns.length})
+        </h2>
+        <p className="mt-2 max-w-[48rem] text-sm text-muted">
+          Approve only campaigns that meet the advertising standards. Agree dates and price with the advertiser before marking a campaign live;
+          payments are handled outside the platform for now.
+        </p>
+        {campaigns.length ? (
+          <ul className="mt-6 space-y-6">
+            {campaigns.map((c) => {
+              const org = orgOf.get(c.organization_id);
+              return (
+                <li key={c.id} id={`campaign-${c.id}`} className="scroll-mt-24 rounded-[var(--radius-md)] border border-line p-6">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="text-lg">{c.name}</h3>
+                    <span className="inline-flex items-center rounded-full bg-brass-soft px-2.5 py-0.5 text-xs font-semibold text-[#6b5120] ring-1 ring-brass/40">
+                      {campaignStatusLabel[c.status]}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-sm text-muted">
+                    {org?.name ?? "Unknown business"} · {tiers.find((t) => t.value === c.tier)?.label} · {placements.find((p) => p.value === c.placement)?.label}
+                  </p>
+                  <dl className="mt-4 grid gap-4 text-sm sm:grid-cols-2">
+                    <div className="sm:col-span-2">
+                      <dt className="font-semibold text-ink">Headline</dt>
+                      <dd className="mt-1 text-slate">{c.headline}</dd>
+                    </div>
+                    {c.body ? (
+                      <div className="sm:col-span-2">
+                        <dt className="font-semibold text-ink">Supporting text</dt>
+                        <dd className="mt-1 text-slate">{c.body}</dd>
+                      </div>
+                    ) : null}
+                    <div>
+                      <dt className="font-semibold text-ink">Link destination</dt>
+                      <dd className="mt-1 break-all">
+                        <a href={c.destination_url} target="_blank" rel="noopener noreferrer nofollow" className="text-gold-strong underline underline-offset-2">
+                          {c.destination_url}
+                          <span className="sr-only"> (opens in a new tab)</span>
+                        </a>
+                      </dd>
+                    </div>
+                    <div>
+                      <dt className="font-semibold text-ink">Preferred dates</dt>
+                      <dd className="mt-1 text-slate">
+                        {c.starts_on ?? "Not set"} to {c.ends_on ?? "not set"}
+                      </dd>
+                    </div>
+                    {c.budget_note ? (
+                      <div className="sm:col-span-2">
+                        <dt className="font-semibold text-ink">Budget and notes</dt>
+                        <dd className="mt-1 text-slate">{c.budget_note}</dd>
+                      </div>
+                    ) : null}
+                  </dl>
+                  <form action={reviewCampaign} className="mt-5 border-t border-line pt-5">
+                    <input type="hidden" name="campaignId" value={c.id} />
+                    {campaignActions[c.status]?.some((a) => a.decision === "return") ? (
+                      <>
+                        <label htmlFor={`cnote-${c.id}`} className="block text-sm font-semibold text-ink">
+                          Note to the advertiser (needed to return it)
+                        </label>
+                        <textarea
+                          id={`cnote-${c.id}`}
+                          name="note"
+                          rows={2}
+                          maxLength={1000}
+                          className="mt-2 w-full rounded-[var(--radius-sm)] border border-line-strong px-3 py-2 text-sm focus:border-gold focus:outline-none focus:ring-2 focus:ring-gold/20"
+                        />
+                      </>
+                    ) : null}
+                    <div className="mt-3 flex flex-wrap gap-3">
+                      {(campaignActions[c.status] ?? []).map((a) => (
+                        <button
+                          key={a.decision}
+                          name="decision"
+                          value={a.decision}
+                          className={a.primary ? `${btn} bg-gold text-white hover:bg-gold-strong` : `${btn} border border-line-strong text-ink hover:border-ink`}
+                        >
+                          {a.label}
+                          <span className="sr-only"> campaign {c.name}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </form>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <p className="mt-4 text-sm text-muted">No campaigns waiting or running.</p>
+        )}
       </section>
     </div>
   );

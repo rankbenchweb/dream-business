@@ -70,6 +70,7 @@ export type ListingInput = {
   website: string;
   headquarters: string;
   servesMarkets: string[];
+  organizationId?: string;
 };
 export type ListingErrors = Partial<Record<keyof ListingInput, string>>;
 
@@ -140,5 +141,6 @@ export function listingFromForm(f: FormData): ListingInput {
     website: str("website"),
     headquarters: str("headquarters"),
     servesMarkets: f.getAll("servesMarkets").map(String),
+    organizationId: str("organizationId"),
   };
 }

@@ -90,3 +90,39 @@ export async function getPendingInvites(orgId: string): Promise<PendingInvite[]>
   const now = Date.now();
   return (data ?? []).filter((i) => !i.accepted_at && !i.closed_at && new Date(i.expires_at as string).getTime() > now) as PendingInvite[];
 }
+
+export type MyCampaign = {
+  id: string;
+  organization_id: string;
+  listing_id: string | null;
+  name: string;
+  tier: string;
+  placement: string;
+  destination_url: string;
+  headline: string;
+  body: string | null;
+  starts_on: string | null;
+  ends_on: string | null;
+  budget_note: string | null;
+  status: import("./campaigns").CampaignStatus;
+  review_note: string | null;
+  updated_at: string;
+};
+
+const CAMPAIGN_COLUMNS = "id,organization_id,listing_id,name,tier,placement,destination_url,headline,body,starts_on,ends_on,budget_note,status,review_note,updated_at";
+
+export async function getCampaignsForOrgs(orgIds: string[]): Promise<MyCampaign[]> {
+  if (!orgIds.length) return [];
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("campaigns").select(CAMPAIGN_COLUMNS).in("organization_id", orgIds).order("updated_at", { ascending: false });
+  if (error) throw new Error(`campaigns: ${error.message}`);
+  return (data ?? []) as MyCampaign[];
+}
+
+export async function getCampaign(id: string): Promise<MyCampaign | null> {
+  if (!/^[0-9a-f-]{36}$/i.test(id)) return null;
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("campaigns").select(CAMPAIGN_COLUMNS).eq("id", id).maybeSingle();
+  if (error) throw new Error(`campaign: ${error.message}`);
+  return (data as MyCampaign | null) ?? null;
+}

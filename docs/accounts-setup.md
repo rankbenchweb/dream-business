@@ -9,7 +9,8 @@ hides all sign-in links and account pages say accounts open soon.
 - **Business profiles.** A person creates a profile for their business and becomes its owner.
 - **Directory listings.** Owners, admins and editors create listings, save drafts, submit for review, withdraw, archive and restore.
 - **Teams.** Owners and admins invite colleagues by email as admin, editor, campaign manager or analyst, change roles, cancel invitations and remove members. Invitations are not emailed yet: the invited person signs in with that address and accepts on their account page (open for 14 days). A business always keeps at least one owner.
-- **Staff review** at `/staff/review`, for the emails in `STAFF_EMAILS` only: publish, return with a note, mark verified (with a description of the check) or remove verification.
+- **Campaigns.** Owners, admins and campaign managers submit promotion campaigns (level, placement, listing to feature, headline, link, preferred dates, budget notes), withdraw them, delete drafts and pause live ones. Analysts can view. Payment is agreed outside the platform for now: approval says so, and staff mark a campaign live only after dates and price are agreed. Changing an approved or live campaign sends it back for review.
+- **Staff review** at `/staff/review`, for the emails in `STAFF_EMAILS` only: publish, return with a note, mark verified (with a description of the check) or remove verification; for campaigns, approve, return with a note, mark live, pause, resume or end.
 - **Public directory** on the Marketplace page: published listings only, with search and filters by category and market served.
 
 Every rule that matters (who can publish, verify or see what) is enforced by the
@@ -39,11 +40,11 @@ database, not just by the screens. See `docs/database-stage2.md`.
 The real Supabase sign-in server couldn't be run in the build environment, so
 testing used `supabase/tests/fake_supabase.py`: a small local stand-in for
 Supabase's sign-in and data services, running on a real PostgreSQL database
-with this project's actual security rules. 36 account checks and 24 team checks passed end to end,
+with this project's actual security rules. 37 account checks, 24 team checks and 24 campaign checks passed end to end,
 including the full sign-in link flow, used links, business profile, listing
 validation, withdraw and resubmit, outsider and non-staff access blocked, staff
 return with note, publish, verify, directory filters, edits sending a live
-listing back to review, safe redirects, sign-out, mobile layout, and for teams: inviting, duplicate and invalid invitations, accepting, declining, cancelling, role changes taking effect, the last owner unable to leave, removal ending access, and outsiders blocked. Account and
+listing back to review, safe redirects, sign-out, mobile layout, and for teams: inviting, duplicate and invalid invitations, accepting, declining, cancelling, role changes taking effect, the last owner unable to leave, removal ending access, and outsiders blocked; and for campaigns: validation (featured listing required, https links, no past start dates, values kept after errors), withdraw and resubmit, staff return with note, approve, live, owner pause, resume, edits to a live campaign returning it to review, end, and deleting a draft. Account and
 staff pages passed automated accessibility checks at desktop and mobile sizes.
 
 The stand-in is not Supabase, so step 6 above is required before launch.
