@@ -6,7 +6,7 @@ import { DisclosureLabel, disclosures } from "@/components/Disclosure";
 import { ButtonLink, Section, SectionHeading, TextLink } from "@/components/ui";
 import { divisions } from "@/lib/divisions";
 import { marketplaceCategories } from "@/lib/marketplace";
-import { getDirectory } from "@/lib/directory";
+import { getDirectory, isRunning } from "@/lib/directory";
 import { pageMetadata } from "@/lib/seo";
 import { accountsEnabled, listBusinessHref } from "@/lib/supabase/config";
 
@@ -128,8 +128,12 @@ async function LiveDirectory() {
     );
   }
   const catName = new Map(directory.categories.map((c) => [c.id, c.name]));
+  const today = new Date().toISOString().slice(0, 10);
   return (
     <DirectoryBrowser
+      sponsored={directory.sponsored
+        .filter((p) => isRunning(p, today))
+        .map((p) => ({ campaignId: p.campaign_id, listingId: p.listing_id, headline: p.headline, body: p.body, url: p.destination_url }))}
       categories={directory.categories.map((c) => c.name)}
       listings={directory.listings.map((l) => ({
         id: l.id,

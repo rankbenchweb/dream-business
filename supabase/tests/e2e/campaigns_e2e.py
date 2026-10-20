@@ -1,6 +1,6 @@
 """End-to-end: advertiser campaigns from submission to end. Same setup as accounts_e2e.py.
 Usage: python3 campaigns_e2e.py <email_log> <path to axe.min.js>"""
-import fnmatch, json, os, re, sys, time
+import fnmatch, json, os, re, subprocess, sys, time
 from playwright.sync_api import sync_playwright
 
 B = "http://localhost:3102"
@@ -124,14 +124,34 @@ with sync_playwright() as p:
     s.get_by_role("button", name="Mark as live campaign Autumn feature").click(); wait_path(s, "**notice=go-live**")
     o.goto(camp_url, wait_until="load")
     check("owner sees the campaign live", seen(o.get_by_text("Running now.")))
+    x.goto(B + "/about", wait_until="load"); x.goto(B + "/marketplace", wait_until="load"); seen(x.get_by_role("heading", name="Business directory"))
+    seen(x.get_by_text(re.compile("newest first")))
+    check("live campaign with a future start date isn't shown yet", (x.locator("section[aria-label='Sponsored placements']").count() > 0) == False)
+    subprocess.run(["psql", "-h", "/var/run/postgresql", "-d", "tdb_e2e", "-qc", "update campaigns set starts_on = current_date where name = 'Autumn feature'"], check=True)
     o.get_by_role("button", name="Pause campaign").click(); wait_path(o, "**notice=campaign-paused")
     check("owner pauses a live campaign", seen(o.get_by_text("Paused", exact=True)))
+    x.goto(B + "/about", wait_until="load"); x.goto(B + "/marketplace", wait_until="load"); seen(x.get_by_role("heading", name="Business directory"))
+    seen(x.get_by_text(re.compile("newest first")))
+    check("paused campaign isn't shown", (x.locator("section[aria-label='Sponsored placements']").count() > 0) == False)
     s.goto(B + "/staff/review", wait_until="load")
     s.get_by_role("button", name="Resume campaign Autumn feature").click(); wait_path(s, "**notice=go-live**")
+    x.goto(B + "/about", wait_until="load"); x.goto(B + "/marketplace", wait_until="load"); seen(x.get_by_role("heading", name="Business directory"))
+    seen(x.get_by_text(re.compile("newest first")))
+    check("running campaign is shown in the directory", (x.locator("section[aria-label='Sponsored placements']").count() > 0) == True)
+    card = x.locator("section[aria-label='Sponsored placements'] li").first
+    check("sponsored card is labelled and shows the approved headline", seen(card.get_by_text("Sponsored", exact=True)) and seen(card.get_by_text("Kitchenware for Gulf online stores")))
+    check("sponsored link is marked as sponsored", card.get_by_role("link").first.get_attribute("rel") == "sponsored noopener noreferrer")
+    x.get_by_label("Serves").select_option("us")
+    check("sponsored card follows the market filter", x.locator("section[aria-label='Sponsored placements']").count() == 0)
+    x.get_by_label("Serves").select_option("")
+    x.screenshot(path="shots/sponsored.png", full_page=True)
     o.goto(camp_url, wait_until="load")
     o.get_by_label("Headline").fill("Kitchenware for online stores across the Gulf")
     o.get_by_role("button", name="Save changes").click(); wait_path(o, "**notice=campaign-submitted")
     check("changing a live campaign sends it back to review", seen(o.get_by_text("In review", exact=True)))
+    x.goto(B + "/about", wait_until="load"); x.goto(B + "/marketplace", wait_until="load"); seen(x.get_by_role("heading", name="Business directory"))
+    seen(x.get_by_text(re.compile("newest first")))
+    check("campaign back in review is taken down", (x.locator("section[aria-label='Sponsored placements']").count() > 0) == False)
     s.goto(B + "/staff/review", wait_until="load")
     s.get_by_role("button", name="Approve campaign Autumn feature").click(); wait_path(s, "**notice=approve**")
     s.get_by_role("button", name="End campaign Autumn feature").click(); wait_path(s, "**notice=end**")

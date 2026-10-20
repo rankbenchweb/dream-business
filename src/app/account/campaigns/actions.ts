@@ -5,6 +5,7 @@ import { requireUser } from "@/lib/auth";
 import { getCampaign, getListingsForOrgs, getMyOrganizations } from "@/lib/accountData";
 import { campaignFromForm, canManageCampaigns, validateCampaign, type CampaignErrors, type CampaignInput } from "@/lib/campaigns";
 import { httpsUrl } from "@/lib/listings";
+import { refreshDirectory } from "@/lib/directory";
 import { createClient } from "@/lib/supabase/server";
 
 const GENERIC = "Something went wrong on our side. Please try again in a moment.";
@@ -52,6 +53,7 @@ export async function saveCampaign(_: CampaignState, form: FormData): Promise<Ca
       return { error: error ? GENERIC : "You don't have permission to edit this campaign.", values: input };
     }
     const now = data[0].status as string;
+    if (existing.status === "live") refreshDirectory(); // changes take a live placement down until re-approved
     redirect(`/account?notice=${now === "submitted" ? "campaign-submitted" : "campaign-saved"}`);
   }
 
@@ -83,5 +85,6 @@ export async function changeCampaignStatus(form: FormData): Promise<void> {
   const q = move.to ? supabase.from("campaigns").update({ status: move.to }) : supabase.from("campaigns").delete();
   const { data, error } = await q.eq("id", id).select("id");
   if (error) console.error("campaign change failed:", error.code, error.message);
+  if (!error && current.status === "live") refreshDirectory();
   redirect(`/account?notice=${!error && data?.length ? move.notice : "not-allowed"}`);
 }

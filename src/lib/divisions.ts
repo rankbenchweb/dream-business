@@ -1,5 +1,8 @@
-import { listBusinessHref } from "./supabase/config";
+import { accountsEnabled, listBusinessHref } from "./supabase/config";
 import type { Status } from "./tools";
+
+/** Features built behind accounts are only "live" once accounts are switched on. */
+const whenAccounts = (s: Status): Status => (accountsEnabled ? "live" : s);
 
 export type Capability = {
   name: string;
@@ -87,12 +90,14 @@ export const divisions: Record<DivisionKey, Division> = {
       "The Marketplace is a directory of companies that help businesses operate. Basic listings are free. Paid placement, verification and editorial recommendation are kept separate and labelled separately — paying never buys a verified badge.",
     forWhom: "Businesses looking for partners, and the suppliers and service providers who serve them.",
     capabilities: [
-      { name: "Free business listing requests", detail: "Submit your company for the directory through the inquiry form.", status: "live", href: listBusinessHref },
-      { name: "Business profiles", detail: "Company profiles with services, markets served and contact routes.", status: "building" },
-      { name: "Category directories", detail: "Browse suppliers, software, logistics, agencies and more.", status: "building" },
-      { name: "Search and filters", detail: "Filter by category, country served and business size.", status: "planned" },
+      accountsEnabled
+        ? { name: "Free business listings", detail: "Create an account, add your business and submit a listing for review.", status: "live", href: listBusinessHref }
+        : { name: "Free business listing requests", detail: "Submit your company for the directory through the inquiry form.", status: "live", href: listBusinessHref },
+      { name: "Business profiles", detail: "Company profiles with team roles, listings and the markets served.", status: whenAccounts("building") },
+      { name: "Category directories", detail: "Browse suppliers, software, logistics, agencies and more.", status: whenAccounts("building"), ...(accountsEnabled ? { href: "/marketplace#directory" } : {}) },
+      { name: "Search and filters", detail: "Search the directory and filter by category and country served.", status: whenAccounts("planned") },
       { name: "Quote requests", detail: "Send a structured request for quotation to listed suppliers.", status: "planned" },
-      { name: "Verification workflow", detail: "Documented checks before any listing is shown as verified.", status: "planned" },
+      { name: "Verification workflow", detail: "Documented checks before any listing is shown as verified.", status: whenAccounts("planned"), href: "/verification-standards" },
     ],
   },
   promotion: {
@@ -107,9 +112,9 @@ export const divisions: Record<DivisionKey, Division> = {
     capabilities: [
       { name: "Promotion inquiries", detail: "Tell us what you want to promote; we reply with options.", status: "live", href: "/promote#inquiry" },
       { name: "Manual campaign review", detail: "Every campaign is checked against our standards before it runs.", status: "live", href: "/advertising-standards" },
-      { name: "Featured directory listings", detail: "Enhanced visibility in relevant Marketplace categories.", status: "planned" },
+      { name: "Featured directory listings", detail: "Labelled Sponsored placement above directory results in your category.", status: whenAccounts("planned") },
       { name: "Sponsored placements on tool pages", detail: "Relevant, labelled offers alongside tool results.", status: "planned" },
-      { name: "Advertiser dashboard", detail: "Submit, track and renew campaigns in one place.", status: "planned" },
+      { name: "Advertiser dashboard", detail: "Submit, track and pause campaigns from your account.", status: whenAccounts("planned") },
       { name: "Campaign reporting", detail: "Impressions, clicks and referral visits for each placement.", status: "planned" },
     ],
   },

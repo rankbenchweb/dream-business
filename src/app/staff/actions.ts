@@ -67,5 +67,6 @@ export async function reviewCampaign(form: FormData): Promise<void> {
     console.error("campaign review failed:", error?.code, error?.message);
     redirect("/staff/review?notice=failed#campaigns");
   }
+  refreshDirectory();
   redirect(`/staff/review?notice=${d.notice}#campaigns`);
 }
