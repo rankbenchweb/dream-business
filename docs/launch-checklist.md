@@ -6,15 +6,16 @@ everything else Claude does once the step before it is done.
 ## 1. Put the code on GitHub
 - [x] **You:** create the repository `rankbenchweb/dream-business` (done 20 Oct 2026; it is public, and can be made private under Settings → General → Change visibility).
 - [x] Invite `maliksajidali2` as a collaborator (done 20 Oct 2026).
-- [ ] **You:** accept the invitation while signed in as maliksajidali2: https://github.com/rankbenchweb/dream-business/invitations
-- [ ] Claude uploads all the code.
+- [x] Invitation accepted by maliksajidali2; Claude GitHub App installed on rankbenchweb for dream-business only (20 Oct).
+- [x] Claude uploaded all the code (20 Oct).
 
 ## 2. Go live on a free Netlify address
-- [ ] **You:** in Netlify, open the project "the-dream-business" → Site configuration → Build & deploy → Link repository → GitHub → choose `rankbenchweb/dream-business`. Netlify asks once for permission to read the repository.
-- [ ] Build settings (Netlify usually detects them): build command `npm run build`, publish directory `.next`.
-- [ ] Claude checks the live site: every page loads, tools work, forms show the right messages, nothing is indexed by search engines yet.
+- [x] Netlify account "rankbenchweb's team" (signs in with GitHub as rankbenchweb) created by the founder; the older account (maliksajidali) had used its free credits for October.
+- [x] Project **thedreambusiness** linked to `rankbenchweb/dream-business`, branch `main`, Next.js detected automatically (20 Oct).
+- [x] First deploy published in 50 seconds and made public: **https://thedreambusiness.netlify.app**
+- [x] Checked live: home page, calculator results, 404 page, robots.txt blocks indexing as intended.
 
-At this point the site is public at a netlify.app address, with accounts switched off.
+Every push to `main` publishes automatically. On the free plan each production deploy costs 15 of 300 monthly credits (about 20 deploys a month), so updates are grouped.
 
 ## 3. Receive inquiries
 Pick one:
